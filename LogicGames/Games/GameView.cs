@@ -7,14 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
-namespace LogicGames
+namespace LogicGames.Games
 {
-    public partial class Form1 : Form
+    public partial class GameView : Form
     {
-        public Form1()
+        protected Rectangle container;
+        public GameView()
         {
             InitializeComponent();
+            container = new Rectangle(0,0, 500, 600);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
-namespace LogicGames
+namespace LogicGames.Games.Minesweeper
 {
-    partial class Form1
+    partial class Minesweeper
     {
         /// <summary>
         /// Required designer variable.
@@ -29,13 +29,20 @@ namespace LogicGames
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // Minesweeper
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Name = "Minesweeper";
+            this.Text = "Minesweeper";
+            this.Load += new System.EventHandler(this.Minesweeper_Load);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
     }
 }
-
