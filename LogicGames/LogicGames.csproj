@@ -75,6 +75,7 @@
     <Compile Include="Games\Game2048\Game2048.Designer.cs">
       <DependentUpon>Game2048.cs</DependentUpon>
     </Compile>
+    <Compile Include="Games\Game2048\Tile.cs" />
     <Compile Include="Games\GameView.cs">
       <SubType>Form</SubType>
     </Compile>

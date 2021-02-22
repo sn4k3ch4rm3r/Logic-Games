@@ -33,11 +33,12 @@ namespace LogicGames.Games.Game2048
             // 
             // Game2048
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 366);
             this.Name = "Game2048";
             this.Text = "Game2048";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Game2048_KeyDown);
             this.ResumeLayout(false);
 
         }
