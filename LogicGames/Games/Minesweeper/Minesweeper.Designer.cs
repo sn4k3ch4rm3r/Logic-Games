@@ -38,7 +38,6 @@ namespace LogicGames.Games.Minesweeper
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "Minesweeper";
             this.Text = "Minesweeper";
-            this.Load += new System.EventHandler(this.Minesweeper_Load);
             this.ResumeLayout(false);
 
         }
