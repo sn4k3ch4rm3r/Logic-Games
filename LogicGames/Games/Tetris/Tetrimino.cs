@@ -53,13 +53,13 @@ namespace LogicGames.Games.Tetris
                     if (stateIndex >= states.Count) stateIndex = 0;
                     break;
                 case -1: //left
-                    this.Location = new Point(this.Location.X - blockSize, this.Location.Y);
+                    this.Location = new Point(this.Location.X - 1, this.Location.Y);
                     break;
                 case 1: //right
-                    this.Location = new Point(this.Location.X + blockSize, this.Location.Y);
+                    this.Location = new Point(this.Location.X + 1, this.Location.Y);
                     break;
                 default: //down
-                    this.Location = new Point(this.Location.X, this.Location.Y + blockSize);
+                    this.Location = new Point(this.Location.X, this.Location.Y + 1);
                     break;
             }
         }
