@@ -88,6 +88,9 @@
     <Compile Include="Games\Minesweeper\Minesweeper.Designer.cs">
       <DependentUpon>Minesweeper.cs</DependentUpon>
     </Compile>
+    <Compile Include="Games\Tetris\Block.cs" />
+    <Compile Include="Games\Tetris\Shapes.cs" />
+    <Compile Include="Games\Tetris\Tetrimino.cs" />
     <Compile Include="Games\Tetris\Tetris.cs">
       <SubType>Form</SubType>
     </Compile>

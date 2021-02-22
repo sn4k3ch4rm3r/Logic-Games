@@ -38,7 +38,6 @@ namespace LogicGames.Games.Tetris
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "Tetris";
             this.Text = "Tetris";
-            this.Load += new System.EventHandler(this.Tetris_Load);
             this.ResumeLayout(false);
 
         }
