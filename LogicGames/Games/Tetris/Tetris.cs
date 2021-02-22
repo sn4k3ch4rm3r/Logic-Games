@@ -24,26 +24,7 @@ namespace LogicGames.Games.Tetris
             this.KeyDown += OnKeyDown;
 
             blocksize = (int)((double)base.container.Height / boardHeight);
-            test = new Tetrimino(blocksize, Color.Red, Color.DarkRed, new int[,]{
-                {
-                    0b1100,
-                    0b0110,
-                    0b0000,
-                    0b0000, 
-                },
-                {
-                    0b0010,
-                    0b0110,
-                    0b0100,
-                    0b0000,
-                }
-               /* {
-                    0b0100,
-                    0b1110,
-                    0b0000,
-                    0b0000,
-                }*/
-            });
+            test = new Tetrimino(blocksize, Color.Red, Color.DarkRed, Shapes.S);
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)

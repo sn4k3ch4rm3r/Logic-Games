@@ -75,6 +75,7 @@
     <Compile Include="Games\Game2048\Game2048.Designer.cs">
       <DependentUpon>Game2048.cs</DependentUpon>
     </Compile>
+    <Compile Include="Games\Game2048\Tile.cs" />
     <Compile Include="Games\GameView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +89,7 @@
       <DependentUpon>Minesweeper.cs</DependentUpon>
     </Compile>
     <Compile Include="Games\Tetris\Block.cs" />
+    <Compile Include="Games\Tetris\Shapes.cs" />
     <Compile Include="Games\Tetris\Tetrimino.cs" />
     <Compile Include="Games\Tetris\Tetris.cs">
       <SubType>Form</SubType>
