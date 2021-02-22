@@ -14,10 +14,20 @@ namespace LogicGames.Games
     public partial class GameView : Form
     {
         protected Rectangle container;
+
+        private int width = 500;
+        private int height = 600;
         public GameView()
         {
             InitializeComponent();
-            container = new Rectangle(0,0, 500, 600);
+            container = new Rectangle(ClientRectangle.Width/2-width/2, ClientRectangle.Height/2-height/2, width, height);
+            this.Resize += onResize;
+        }
+
+        private void onResize(object sender, EventArgs e)
+        {
+            container.Location = new Point(ClientRectangle.Width / 2 - width / 2, ClientRectangle.Height / 2 - height / 2);
+            Refresh();
         }
     }
 }
