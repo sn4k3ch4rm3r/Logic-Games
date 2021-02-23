@@ -36,7 +36,6 @@ namespace LogicGames.Games.Game2048
 
         public void Move(int dir)
         {
-            
             switch (dir)
             {
                 //bal

@@ -18,15 +18,15 @@ namespace LogicGames.Games.Tetris
         private Color color;
         private Color border;
 
-        public Tetrimino(int blockSize, Color color, Color border, int[,] states)
+        public Tetrimino(int blockSize, Shapes.Shape shape)
         {
             stateIndex = 0;
-            this.color = color;
-            this.border = border;
+            this.color = shape.Color;
+            this.border = shape.Border;
             this.blockSize = blockSize;
 
             this.Location = new Point(0, 0);
-
+            int[,] states = shape.Blocks;
             this.states = new List<bool[,]>();
             for (int i = 0; i < states.Length/4; i++)
             {
@@ -46,21 +46,18 @@ namespace LogicGames.Games.Tetris
 
         public void Move(int direction)
         {
-            switch(direction)
+            if(direction == 2)
             {
-                case 2:
-                    stateIndex++;
-                    if (stateIndex >= states.Count) stateIndex = 0;
-                    break;
-                case -1: //left
-                    this.Location = new Point(this.Location.X - 1, this.Location.Y);
-                    break;
-                case 1: //right
-                    this.Location = new Point(this.Location.X + 1, this.Location.Y);
-                    break;
-                default: //down
-                    this.Location = new Point(this.Location.X, this.Location.Y + 1);
-                    break;
+                stateIndex++;
+                if (stateIndex >= states.Count) stateIndex = 0;
+            }
+            else if(direction == -1 || direction == 1)
+            {
+                this.Location = new Point(this.Location.X + direction, this.Location.Y);
+            }
+            else
+            {
+                this.Location = new Point(this.Location.X, this.Location.Y + 1);
             }
         }
 
