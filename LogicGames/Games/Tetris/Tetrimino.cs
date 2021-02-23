@@ -18,15 +18,15 @@ namespace LogicGames.Games.Tetris
         private Color color;
         private Color border;
 
-        public Tetrimino(int blockSize, Color color, Color border, int[,] states)
+        public Tetrimino(int blockSize, Shapes.Shape shape)
         {
             stateIndex = 0;
-            this.color = color;
-            this.border = border;
+            this.color = shape.Color;
+            this.border = shape.Border;
             this.blockSize = blockSize;
 
             this.Location = new Point(0, 0);
-
+            int[,] states = shape.Blocks;
             this.states = new List<bool[,]>();
             for (int i = 0; i < states.Length/4; i++)
             {

@@ -3,158 +3,177 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace LogicGames.Games.Tetris
 {
     static class Shapes
     {
-        public static int[,] O =
-            {
-                {
-                    0b0000,
-                    0b0110,
-                    0b0110,
-                    0b0000,
-                },
-            };
-        
-        public static int[,] I =
-            {
-                {
-                    0b0000,
-                    0b1111,
-                    0b0000,
-                    0b0000,
-                },
-                {
-                    0b0010,
-                    0b0010,
-                    0b0010,
-                    0b0010,
-                },
-                {
-                    0b0000,
-                    0b0000,
-                    0b1111,
-                    0b0000,
-                },
-                {
-                    0b0100,
-                    0b0100,
-                    0b0100,
-                    0b0100,
-                },
-            };
-        public static int[,] J =
-            {
-                {
-                    0b0000,
-                    0b1110,
-                    0b0010,
-                    0b0000,
-                },
-                {
-                    0b0100,
-                    0b0100,
-                    0b1100,
-                    0b0000,
-                },
-                {
-                    0b1000,
-                    0b1110,
-                    0b0000,
-                    0b0000,
-                },
-                {
-                    0b0110,
-                    0b0100,
-                    0b0100,
-                    0b0000,
-                },
-            };
-        public static int[,] L =
-            {
-                {
-                    0b0000,
-                    0b1110,
-                    0b1000,
-                    0b0000,
-                },
-                {
-                    0b1100,
-                    0b0100,
-                    0b0100,
-                    0b0000,
-                },
-                {
-                    0b0010,
-                    0b1110,
-                    0b0000,
-                    0b0000,
-                },
-                {
-                    0b0100,
-                    0b0100,
-                    0b0110,
-                    0b0000,
-                },
-            };
-        public static int[,] T =
-            {
-                {
-                    0b0000,
-                    0b1110,
-                    0b0100,
-                    0b0000,
-                },
-                {
-                    0b0100,
-                    0b1100,
-                    0b0100,
-                    0b0000,
-                },
-                {
-                    0b0100,
-                    0b1110,
-                    0b0000,
-                    0b0000,
-                },
-                {
-                    0b0100,
-                    0b0110,
-                    0b0100,
-                    0b0000,
-                },
-            };
-        public static int[,] Z =
-            {
-                {
-                    0b1100,
-                    0b0110,
-                    0b0000,
-                    0b0000,
-                },
-                {
-                    0b0010,
-                    0b0110,
-                    0b0100,
-                    0b0000,
-                },
-                {
-                    0b0000,
-                    0b1100,
-                    0b0110,
-                    0b0000,
-                },
-                {
-                    0b0100,
-                    0b1100,
-                    0b1000,
-                    0b0000,
-                },
-            };
+        public struct Shape
+        {
+            public int[,] Blocks { get; }
+            public Color Color { get; }
+            public Color Border { get; }
 
-        public static int[,] S =
+            public Shape(Color color, Color border, int[,] shape)
+            {
+                this.Blocks = shape;
+                this.Color = color;
+                this.Border = border;
+            }
+        }
+        private static Random rand = new Random(0);
+        public static Shape O = new Shape(Color.Yellow, Color.SaddleBrown, new int[,]
+            {
+                {
+                    0b0000,
+                    0b0110,
+                    0b0110,
+                    0b0000,
+                },
+            });
+
+        public static Shape I = new Shape(Color.Aqua, Color.Blue, new int[,]
+            {
+                {
+                    0b0000,
+                    0b1111,
+                    0b0000,
+                    0b0000,
+                },
+                {
+                    0b0010,
+                    0b0010,
+                    0b0010,
+                    0b0010,
+                },
+                {
+                    0b0000,
+                    0b0000,
+                    0b1111,
+                    0b0000,
+                },
+                {
+                    0b0100,
+                    0b0100,
+                    0b0100,
+                    0b0100,
+                },
+            });
+
+        public static Shape J = new Shape(Color.Orange, Color.Brown, new int[,]
+            {
+                {
+                    0b0000,
+                    0b1110,
+                    0b0010,
+                    0b0000,
+                },
+                {
+                    0b0100,
+                    0b0100,
+                    0b1100,
+                    0b0000,
+                },
+                {
+                    0b1000,
+                    0b1110,
+                    0b0000,
+                    0b0000,
+                },
+                {
+                    0b0110,
+                    0b0100,
+                    0b0100,
+                    0b0000,
+                },
+            });
+
+        public static Shape L = new Shape(Color.Blue, Color.DarkBlue, new int[,]
+            {
+                {
+                    0b0000,
+                    0b1110,
+                    0b1000,
+                    0b0000,
+                },
+                {
+                    0b1100,
+                    0b0100,
+                    0b0100,
+                    0b0000,
+                },
+                {
+                    0b0010,
+                    0b1110,
+                    0b0000,
+                    0b0000,
+                },
+                {
+                    0b0100,
+                    0b0100,
+                    0b0110,
+                    0b0000,
+                },
+            });
+
+        public static Shape T = new Shape(Color.DarkMagenta, Color.Purple, new int[,]
+            {
+                {
+                    0b0000,
+                    0b1110,
+                    0b0100,
+                    0b0000,
+                },
+                {
+                    0b0100,
+                    0b1100,
+                    0b0100,
+                    0b0000,
+                },
+                {
+                    0b0100,
+                    0b1110,
+                    0b0000,
+                    0b0000,
+                },
+                {
+                    0b0100,
+                    0b0110,
+                    0b0100,
+                    0b0000,
+                },
+            });
+
+        public static Shape Z = new Shape(Color.Red, Color.DarkRed, new int[,]
+            {
+                {
+                    0b1100,
+                    0b0110,
+                    0b0000,
+                    0b0000,
+                },
+                {
+                    0b0010,
+                    0b0110,
+                    0b0100,
+                    0b0000,
+                },
+                {
+                    0b0000,
+                    0b1100,
+                    0b0110,
+                    0b0000,
+                },
+                {
+                    0b0100,
+                    0b1100,
+                    0b1000,
+                    0b0000,
+                },
+            });
+
+        public static Shape S = new Shape(Color.LimeGreen, Color.Green, new int[,]
             {
                 {
                     0b0110,
@@ -180,6 +199,13 @@ namespace LogicGames.Games.Tetris
                     0b0100,
                     0b0000,
                 }
-            };
+            });
+
+        private static Shape[] shapes = { I, O, T, L, J, S, Z };
+        public static Shape Random()
+        {
+            int index = rand.Next(shapes.Length);
+            return shapes[index];
+        }
     }
 }
