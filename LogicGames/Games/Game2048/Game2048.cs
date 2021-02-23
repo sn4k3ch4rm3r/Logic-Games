@@ -85,7 +85,6 @@ namespace LogicGames.Games.Game2048
             TimeSpan currentFrameTime = frameTimer.Elapsed;
             float deltaTime = (float)(currentFrameTime - lastFrameTime).TotalSeconds;
 
-            container.Location = new Point(ClientRectangle.Width / 2 - container.Width / 2, ClientRectangle.Height / 2 - container.Height / 2);
             e.Graphics.FillRectangle(new SolidBrush(Color.White), container);
 
             Render(e, deltaTime);

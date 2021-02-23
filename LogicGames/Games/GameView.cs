@@ -20,14 +20,18 @@ namespace LogicGames.Games
         public GameView()
         {
             InitializeComponent();
-            container = new Rectangle(ClientRectangle.Width/2-width/2, ClientRectangle.Height/2-height/2, width, height);
+            SetContainerLocation();
             this.Resize += onResize;
         }
 
         private void onResize(object sender, EventArgs e)
         {
-            container.Location = new Point(ClientRectangle.Width / 2 - width / 2, ClientRectangle.Height / 2 - height / 2);
+            SetContainerLocation();
             Refresh();
+        }
+        private void SetContainerLocation()
+        {
+            container = new Rectangle((ClientRectangle.Width / 2) - (width / 2), (ClientRectangle.Height / 2) - (height / 2), width, height);
         }
     }
 }
