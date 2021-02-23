@@ -28,50 +28,53 @@ namespace LogicGames.Games.Game2048
         
         private void Game2048_KeyDown(object sender, KeyEventArgs e)
         {
+            bool didMove = false;
             for (int i = 0; i < tiles.Count; i++)
             {
                 tile = tiles[i];
-                int X = tiles[i].Coord[0];
-                int Y = tiles[i].Coord[1];
                 switch (e.KeyCode)
                 {
                     case Keys.Left:
                         while (!CanMove(tile, 1))
                         {
-                            positions[tiles[i].Coord[0] - 1, tiles[i].Coord[1]] = tile.value;
-                            positions[tiles[i].Coord[0], tiles[i].Coord[1]] = 0;
+                            positions[tile.Coord[0] - 1, tile.Coord[1]] = tile.value;
+                            positions[tile.Coord[0], tile.Coord[1]] = 0;
                             tile.Move(1);
+                            didMove = true;
                         }
                         break;
                     case Keys.Right:
                         while (!CanMove(tile, 2))
                         {
-                            positions[tiles[i].Coord[0] + 1, tiles[i].Coord[1]] = tile.value;
-                            positions[tiles[i].Coord[0], tiles[i].Coord[1]] = 0;
+                            positions[tile.Coord[0] + 1, tile.Coord[1]] = tile.value;
+                            positions[tile.Coord[0], tile.Coord[1]] = 0;
                             tile.Move(2);
+                            didMove = true;
                         }
                         break;
                     case Keys.Up:
                         while (!CanMove(tile, 3))
                         {
-                            positions[tiles[i].Coord[0], tiles[i].Coord[1] - 1] = tile.value;
-                            positions[tiles[i].Coord[0], tiles[i].Coord[1]] = 0;
+                            positions[tile.Coord[0], tile.Coord[1] - 1] = tile.value;
+                            positions[tile.Coord[0], tile.Coord[1]] = 0;
                             tile.Move(3);
+                            didMove = true;
                         }
                         break;
                     case Keys.Down:
                         while (!CanMove(tile, 4))
                         {
-                            positions[tiles[i].Coord[0], tiles[i].Coord[1] + 1] = tile.value;
-                            positions[tiles[i].Coord[0], tiles[i].Coord[1]] = 0;
+                            positions[tile.Coord[0], tile.Coord[1] + 1] = tile.value;
+                            positions[tile.Coord[0], tile.Coord[1]] = 0;
                             tile.Move(4);
+                            didMove = true;
                         }
                         break;
                     default:
                         break;
                 }
             }
-            NewTile();
+            if(tiles.Count < 16 && didMove) NewTile();
         }
 
         TimeSpan lastFrameTime = TimeSpan.Zero;
