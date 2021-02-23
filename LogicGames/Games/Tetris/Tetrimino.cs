@@ -46,21 +46,18 @@ namespace LogicGames.Games.Tetris
 
         public void Move(int direction)
         {
-            switch(direction)
+            if(direction == 2)
             {
-                case 2:
-                    stateIndex++;
-                    if (stateIndex >= states.Count) stateIndex = 0;
-                    break;
-                case -1: //left
-                    this.Location = new Point(this.Location.X - 1, this.Location.Y);
-                    break;
-                case 1: //right
-                    this.Location = new Point(this.Location.X + 1, this.Location.Y);
-                    break;
-                default: //down
-                    this.Location = new Point(this.Location.X, this.Location.Y + 1);
-                    break;
+                stateIndex++;
+                if (stateIndex >= states.Count) stateIndex = 0;
+            }
+            else if(direction == -1 || direction == 1)
+            {
+                this.Location = new Point(this.Location.X + direction, this.Location.Y);
+            }
+            else
+            {
+                this.Location = new Point(this.Location.X, this.Location.Y + 1);
             }
         }
 
