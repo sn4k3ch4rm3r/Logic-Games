@@ -20,6 +20,7 @@ namespace LogicGames.Games.Minesweeper
         }
 
         static int[,] field = new int[20,25]; //1 = mine, 0 = free space
+        System.Windows.Forms.Button[,] btnArray = new System.Windows.Forms.Button[20,25];
         static Button LeftClickedButton, RightClickedButton;
         static bool generate = true;
 
@@ -48,6 +49,7 @@ namespace LogicGames.Games.Minesweeper
                     dark = !dark;
                     newButton.MouseDown += new MouseEventHandler(MyButton_Click);
                     newButton.Name = i.ToString() + "," + j.ToString();
+                    btnArray[i - 1, j - 1] = newButton;
                     this.Controls.Add(newButton);
                 }
             }
@@ -108,13 +110,19 @@ namespace LogicGames.Games.Minesweeper
             Reset(this.Controls);
         }
 
-        private void check(int column, int row, int count)
+        private void check(int column, int row, int count, int clicked_column, int clicked_row)
         {
             if (row + 1 <= 24)
             {
                 if (field[column, row + 1] == 1)
                 {
                     count++;
+                }
+                else
+                {
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    row++;
+                    check(column, row, 0, clicked_column, clicked_row);
                 }
             }
             if (row - 1 >= 0)
@@ -123,6 +131,12 @@ namespace LogicGames.Games.Minesweeper
                 {
                     count++;
                 }
+                else
+                {
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    row--;
+                    check(column, row, 0, clicked_column, clicked_row);
+                }
             }
             if (column + 1 <= 19)
             {
@@ -130,26 +144,24 @@ namespace LogicGames.Games.Minesweeper
                 {
                     count++;
                 }
+                else
+                {
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    column++;
+                    check(column, row, 0, clicked_column, clicked_row);
+                }
             }
-            if (column - 1 >= 0 && row + 1 <=24)
+            if (column - 1 >= 00)
             {
-                if (field[column - 1, row + 1] == 1)
+                if (field[column + 1, row] == 1)
                 {
                     count++;
                 }
-            }
-            if (column + 1 <= 19 && row + 1 <= 24)
-            {
-                if (field[column + 1, row + 1] == 1)
+                else
                 {
-                    count++;
-                }
-            }
-            if (column - 1 >= 0 && row - 1 >= 0)
-            {
-                if (field[column - 1, row - 1] == 1)
-                {
-                    count++;
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    column--;
+                    check(column, row, 0, clicked_column, clicked_row);
                 }
             }
             if (column - 1 >= 0 && row + 1 <= 24)
@@ -158,6 +170,41 @@ namespace LogicGames.Games.Minesweeper
                 {
                     count++;
                 }
+                else
+                {
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    column--;
+                    row++;
+                    check(column, row, 0, clicked_column, clicked_row);
+                }
+            }
+            if (column + 1 <= 19 && row + 1 <= 24)
+            {
+                if (field[column + 1, row + 1] == 1)
+                {
+                    count++;
+                }
+                else
+                {
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    column++;
+                    row++;
+                    check(column, row, 0, clicked_column, clicked_row);
+                }
+            }
+            if (column - 1 >= 0 && row - 1 >= 0)
+            {
+                if (field[column - 1, row - 1] == 1)
+                {
+                    count++;
+                }
+                else
+                {
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    column--;
+                    row--;
+                    check(column, row, 0, clicked_column, clicked_row);
+                }
             }
             if (column + 1 <= 19 && row - 1 >= 0)
             {
@@ -165,10 +212,22 @@ namespace LogicGames.Games.Minesweeper
                 {
                     count++;
                 }
+                else
+                {
+                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
+                    column++;
+                    row--;
+                    check(column, row, 0, clicked_column, clicked_row);
+                }
             }
             if (count > 0)
             {
-                LeftClickedButton.Text = Convert.ToString(count);
+                btnArray[column, row].Text = Convert.ToString(count);
+                //check(clicked_column, clicked_row, 0, clicked_column, clicked_row, progress * -1);
+            }
+            else if (count == 0)
+            {
+                btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
             }
         }
 
@@ -197,7 +256,7 @@ namespace LogicGames.Games.Minesweeper
                 {
                     Ending();
                 }
-                check(column - 1, row - 1, 0);
+                check(column - 1, row - 1, 0, column - 1, row - 1);
                 //MessageBox.Show("Column: " + column + " Row: " + row); //Coordinate check
             }
         }
@@ -264,4 +323,5 @@ if (row + 1 <= 24)
             {
                 LeftClickedButton.Text = Convert.ToString(count);
             }
+            //LeftClickedButton.BackColor = Color.FromArgb(215, 184, 153);
 */ //Back up of original Check function if i break everything :)
