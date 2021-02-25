@@ -10,7 +10,8 @@ namespace LogicGames.Games.Game2048
         private Tile tile;
         private int score = 0;
         private int currentTiles;
-        int cellSize;
+        private int cellSize;
+        private bool anyMove;
         Tile[,] positions = new Tile[4, 4];
         public Game2048() : base()
         {
@@ -19,148 +20,25 @@ namespace LogicGames.Games.Game2048
             DoubleBuffered = true;
             cellSize = base.container.Width / 4;
             NewTile();
+            NewTile();
         }
 
         private void Game2048_KeyDown(object sender, KeyEventArgs e)
         {
-            bool anyMove = false;
+            anyMove = false;
             switch (e.KeyCode)
             {
                 case Keys.Left:
-                    for (int j = 0; j < 4; j++)
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (positions[i, j] != null)
-                            {
-                                int x = 0;
-                                bool didMerge = false;
-                                while (i - x - 1 >= 0 && (positions[i - x - 1, j] == null || positions[i - x - 1, j].value == positions[i, j].value) && !didMerge)
-                                {
-                                    x++;
-                                    if (positions[i - x, j] != null && positions[i - x, j].value == positions[i, j].value)
-                                    {
-                                        didMerge = true;
-                                    }
-                                }
-                                if (x > 0)
-                                {
-                                    positions[i, j].Coord[0] -= x;
-                                    positions[i - x, j] = positions[i, j];
-                                    positions[i, j] = null;
-                                    if (didMerge)
-                                    {
-                                        positions[i - x, j].value *= 2;
-                                        score += positions[i - x, j].value;
-                                        currentTiles--;
-                                    }
-                                    anyMove = true;
-                                }
-                            }
-                        }
-                    }
+                    moveLeft();
                     break;
                 case Keys.Right:
-                    for (int j = 0; j < 4; j++)
-                    {
-                        for (int i = 3; i >= 0; i--)
-                        {
-                            if (positions[i, j] != null)
-                            {
-                                int x = 0;
-                                bool didMerge = false;
-                                while (i + x + 1 < 4 && (positions[i + x + 1, j] == null || positions[i + x + 1, j].value == positions[i, j].value) && !didMerge)
-                                {
-                                    x++;
-                                    if (positions[i + x, j] != null && positions[i + x, j].value == positions[i, j].value)
-                                    {
-                                        didMerge = true;
-                                    }
-                                }
-                                if (x > 0)
-                                {
-                                    positions[i, j].Coord[0] += x;
-                                    positions[i + x, j] = positions[i, j];
-                                    positions[i, j] = null;
-                                    if (didMerge)
-                                    {
-                                        positions[i + x, j].value *= 2;
-                                        score += positions[i + x, j].value;
-                                        currentTiles--;
-                                    }
-                                    anyMove = true;
-                                }
-                            }
-                        }
-                    }
+                    moveRight();
                     break;
                 case Keys.Up:
-                    for (int j = 0; j < 4; j++)
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (positions[i, j] != null)
-                            {
-                                int x = 0;
-                                bool didMerge = false;
-                                while (j - x - 1 >= 0 && (positions[i, j - x - 1] == null || positions[i, j - x - 1].value == positions[i, j].value) && !didMerge)
-                                {
-                                    x++;
-                                    if (positions[i, j - x] != null && positions[i, j - x].value == positions[i, j].value)
-                                    {
-                                        didMerge = true;
-                                    }
-                                }
-                                if (x > 0)
-                                {
-                                    positions[i, j].Coord[1] -= x;
-                                    positions[i, j - x] = positions[i, j];
-                                    positions[i, j] = null;
-                                    if (didMerge)
-                                    {
-                                        positions[i, j - x].value *= 2;
-                                        score += positions[i, j - x].value;
-                                        currentTiles--;
-                                    }
-                                    anyMove = true;
-                                }
-                            }
-                        }
-                    }
+                    moveUp();
                     break;
                 case Keys.Down:
-                    for (int j = 3; j >= 0; j--)
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (positions[i, j] != null)
-                            {
-                                int x = 0;
-                                bool didMerge = false;
-                                while (j + x + 1 < 4 && (positions[i, j + x + 1] == null || positions[i, j + x + 1].value == positions[i, j].value) && !didMerge)
-                                {
-                                    x++;
-                                    if (positions[i, j + x] != null && positions[i, j + x].value == positions[i, j].value)
-                                    {
-                                        didMerge = true;
-                                    }
-                                }
-                                if (x > 0)
-                                {
-                                    positions[i, j].Coord[1] += x;
-                                    positions[i, j + x] = positions[i, j];
-                                    positions[i, j] = null;
-                                    if (didMerge)
-                                    {
-                                        positions[i, j + x].value *= 2;
-                                        score += positions[i, j + x].value;
-                                        currentTiles--;
-                                    }
-                                    anyMove = true;
-                                }
-                            }
-                        }
-                    }
+                    
                     break;
             }
             if (anyMove)
@@ -175,7 +53,148 @@ namespace LogicGames.Games.Game2048
                 NewTile();
             }
         }
+        public void moveLeft()
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (positions[i, j] != null)
+                    {
+                        int x = 0;
+                        bool didMerge = false;
+                        while (i - x - 1 >= 0 && (positions[i - x - 1, j] == null || positions[i - x - 1, j].value == positions[i, j].value) && !didMerge)
+                        {
+                            x++;
+                            if (positions[i - x, j] != null && positions[i - x, j].value == positions[i, j].value)
+                            {
+                                didMerge = true;
+                            }
+                        }
+                        if (x > 0)
+                        {
+                            positions[i, j].Coord[0] -= x;
+                            positions[i - x, j] = positions[i, j];
+                            positions[i, j] = null;
+                            if (didMerge)
+                            {
+                                positions[i - x, j].value *= 2;
+                                score += positions[i - x, j].value;
+                                currentTiles--;
+                            }
+                            anyMove = true;
+                        }
+                    }
+                }
+            }
+        }
+        public void moveRight()
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                for (int i = 3; i >= 0; i--)
+                {
+                    if (positions[i, j] != null)
+                    {
+                        int x = 0;
+                        bool didMerge = false;
+                        while (i + x + 1 < 4 && (positions[i + x + 1, j] == null || positions[i + x + 1, j].value == positions[i, j].value) && !didMerge)
+                        {
+                            x++;
+                            if (positions[i + x, j] != null && positions[i + x, j].value == positions[i, j].value)
+                            {
+                                didMerge = true;
+                            }
+                        }
+                        if (x > 0)
+                        {
+                            positions[i, j].Coord[0] += x;
+                            positions[i + x, j] = positions[i, j];
+                            positions[i, j] = null;
+                            if (didMerge)
+                            {
+                                positions[i + x, j].value *= 2;
+                                score += positions[i + x, j].value;
+                                currentTiles--;
+                            }
+                            anyMove = true;
+                        }
+                    }
+                }
+            }
+        }
 
+        public void moveUp()
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (positions[i, j] != null)
+                    {
+                        int x = 0;
+                        bool didMerge = false;
+                        while (j - x - 1 >= 0 && (positions[i, j - x - 1] == null || positions[i, j - x - 1].value == positions[i, j].value) && !didMerge)
+                        {
+                            x++;
+                            if (positions[i, j - x] != null && positions[i, j - x].value == positions[i, j].value)
+                            {
+                                didMerge = true;
+                            }
+                        }
+                        if (x > 0)
+                        {
+                            positions[i, j].Coord[1] -= x;
+                            positions[i, j - x] = positions[i, j];
+                            positions[i, j] = null;
+                            if (didMerge)
+                            {
+                                positions[i, j - x].value *= 2;
+                                score += positions[i, j - x].value;
+                                currentTiles--;
+                            }
+                            anyMove = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void moveDown()
+        {
+            for (int j = 3; j >= 0; j--)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (positions[i, j] != null)
+                    {
+                        int x = 0;
+                        bool didMerge = false;
+                        while (j + x + 1 < 4 && (positions[i, j + x + 1] == null || positions[i, j + x + 1].value == positions[i, j].value) && !didMerge)
+                        {
+                            x++;
+                            if (positions[i, j + x] != null && positions[i, j + x].value == positions[i, j].value)
+                            {
+                                didMerge = true;
+                            }
+                        }
+                        if (x > 0)
+                        {
+                            positions[i, j].Coord[1] += x;
+                            positions[i, j + x] = positions[i, j];
+                            positions[i, j] = null;
+                            if (didMerge)
+                            {
+                                positions[i, j + x].value *= 2;
+                                score += positions[i, j + x].value;
+                                currentTiles--;
+                            }
+                            anyMove = true;
+                        }
+                    }
+                }
+            }
+        }
         public bool gameOver()
         {
             for (int j = 0; j < 4; j++)
