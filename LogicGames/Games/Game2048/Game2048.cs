@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace LogicGames.Games.Game2048
 {
     public partial class Game2048 : GameView
     {
         private Tile tile;
+        private int score = 0;
+        private int currentTiles;
         int cellSize;
-        int[,] positions = new int[4, 4];
-        List<Tile> tiles = new List<Tile>();
+        Tile[,] positions = new Tile[4, 4];
         public Game2048() : base()
         {
             this.Text = "2048";
@@ -25,56 +20,185 @@ namespace LogicGames.Games.Game2048
             cellSize = base.container.Width / 4;
             NewTile();
         }
-        
+
         private void Game2048_KeyDown(object sender, KeyEventArgs e)
         {
-            bool didMove = false;
-            for (int i = 0; i < tiles.Count; i++)
+            bool anyMove = false;
+            switch (e.KeyCode)
             {
-                tile = tiles[i];
-                switch (e.KeyCode)
+                case Keys.Left:
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (positions[i, j] != null)
+                            {
+                                int x = 0;
+                                bool didMerge = false;
+                                while (i - x - 1 >= 0 && (positions[i - x - 1, j] == null || positions[i - x - 1, j].value == positions[i, j].value) && !didMerge)
+                                {
+                                    x++;
+                                    if (positions[i - x, j] != null && positions[i - x, j].value == positions[i, j].value)
+                                    {
+                                        didMerge = true;
+                                    }
+                                }
+                                if (x > 0)
+                                {
+                                    positions[i, j].Coord[0] -= x;
+                                    positions[i - x, j] = positions[i, j];
+                                    positions[i, j] = null;
+                                    if (didMerge)
+                                    {
+                                        positions[i - x, j].value *= 2;
+                                        score += positions[i - x, j].value;
+                                        currentTiles--;
+                                    }
+                                    anyMove = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case Keys.Right:
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 3; i >= 0; i--)
+                        {
+                            if (positions[i, j] != null)
+                            {
+                                int x = 0;
+                                bool didMerge = false;
+                                while (i + x + 1 < 4 && (positions[i + x + 1, j] == null || positions[i + x + 1, j].value == positions[i, j].value) && !didMerge)
+                                {
+                                    x++;
+                                    if (positions[i + x, j] != null && positions[i + x, j].value == positions[i, j].value)
+                                    {
+                                        didMerge = true;
+                                    }
+                                }
+                                if (x > 0)
+                                {
+                                    positions[i, j].Coord[0] += x;
+                                    positions[i + x, j] = positions[i, j];
+                                    positions[i, j] = null;
+                                    if (didMerge)
+                                    {
+                                        positions[i + x, j].value *= 2;
+                                        score += positions[i + x, j].value;
+                                        currentTiles--;
+                                    }
+                                    anyMove = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case Keys.Up:
+                    for (int j = 0; j < 4; j++)
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (positions[i, j] != null)
+                            {
+                                int x = 0;
+                                bool didMerge = false;
+                                while (j - x - 1 >= 0 && (positions[i, j - x - 1] == null || positions[i, j - x - 1].value == positions[i, j].value) && !didMerge)
+                                {
+                                    x++;
+                                    if (positions[i, j - x] != null && positions[i, j - x].value == positions[i, j].value)
+                                    {
+                                        didMerge = true;
+                                    }
+                                }
+                                if (x > 0)
+                                {
+                                    positions[i, j].Coord[1] -= x;
+                                    positions[i, j - x] = positions[i, j];
+                                    positions[i, j] = null;
+                                    if (didMerge)
+                                    {
+                                        positions[i, j - x].value *= 2;
+                                        score += positions[i, j - x].value;
+                                        currentTiles--;
+                                    }
+                                    anyMove = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case Keys.Down:
+                    for (int j = 3; j >= 0; j--)
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (positions[i, j] != null)
+                            {
+                                int x = 0;
+                                bool didMerge = false;
+                                while (j + x + 1 < 4 && (positions[i, j + x + 1] == null || positions[i, j + x + 1].value == positions[i, j].value) && !didMerge)
+                                {
+                                    x++;
+                                    if (positions[i, j + x] != null && positions[i, j + x].value == positions[i, j].value)
+                                    {
+                                        didMerge = true;
+                                    }
+                                }
+                                if (x > 0)
+                                {
+                                    positions[i, j].Coord[1] += x;
+                                    positions[i, j + x] = positions[i, j];
+                                    positions[i, j] = null;
+                                    if (didMerge)
+                                    {
+                                        positions[i, j + x].value *= 2;
+                                        score += positions[i, j + x].value;
+                                        currentTiles--;
+                                    }
+                                    anyMove = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+            if (anyMove)
+            {
+                NewTile();
+            }
+            if (currentTiles == 16 && gameOver())
+            {
+                score = 0;
+                positions = new Tile[4, 4];
+                currentTiles = 0;
+                NewTile();
+            }
+        }
+
+        public bool gameOver()
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                for (int i = 0; i < 4; i++)
                 {
-                    case Keys.Left:
-                        while (!CanMove(tile, 1))
+                    if (i < 3)
+                    {
+                        if (positions[i, j].value == positions[i + 1, j].value)
                         {
-                            positions[tile.Coord[0] - 1, tile.Coord[1]] = tile.value;
-                            positions[tile.Coord[0], tile.Coord[1]] = 0;
-                            tile.Move(1);
-                            didMove = true;
+                            return false;
                         }
-                        break;
-                    case Keys.Right:
-                        while (!CanMove(tile, 2))
+                    }
+                    if (j < 3)
+                    {
+                        if (positions[i, j].value == positions[i, j + 1].value)
                         {
-                            positions[tile.Coord[0] + 1, tile.Coord[1]] = tile.value;
-                            positions[tile.Coord[0], tile.Coord[1]] = 0;
-                            tile.Move(2);
-                            didMove = true;
+                            return false;
                         }
-                        break;
-                    case Keys.Up:
-                        while (!CanMove(tile, 3))
-                        {
-                            positions[tile.Coord[0], tile.Coord[1] - 1] = tile.value;
-                            positions[tile.Coord[0], tile.Coord[1]] = 0;
-                            tile.Move(3);
-                            didMove = true;
-                        }
-                        break;
-                    case Keys.Down:
-                        while (!CanMove(tile, 4))
-                        {
-                            positions[tile.Coord[0], tile.Coord[1] + 1] = tile.value;
-                            positions[tile.Coord[0], tile.Coord[1]] = 0;
-                            tile.Move(4);
-                            didMove = true;
-                        }
-                        break;
-                    default:
-                        break;
+                    }
                 }
             }
-            if(tiles.Count < 16 && didMove) NewTile();
+            return true;
         }
 
         TimeSpan lastFrameTime = TimeSpan.Zero;
@@ -104,53 +228,35 @@ namespace LogicGames.Games.Game2048
                 g.DrawLine(p, i * cellSize, 0, i * cellSize, 4 * cellSize);
                 g.DrawLine(p, 0, i * cellSize, 4 * cellSize, i * cellSize);
             }
+            FontFamily font = new FontFamily("Arial");
+            g.DrawString($"Pont: {score}", new Font(font, 16, FontStyle.Bold), new SolidBrush(Color.Black), 10, -60);
 
-            if (tiles.Count > 0)
+            if (positions.Length > 0)
             {
-                for (int i = 0; i < tiles.Count; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    tile = tiles[i];
-                    tile.Render(g);
+                    for (int j = 0; j < 4; j++)
+                    {
+                        tile = positions[i, j];
+                        if (tile != null) tile.Render(g);
+                    }
                 }
             }
+        }
 
-            //example of animation
-            /*xpos += dt*speed;
-            if(xpos >= base.container.Width-100)
-            {
-                xpos = 0;
-            }
-            e.Graphics.DrawRectangle(new Pen(Color.Red, 2), xpos, 375, cellSize, cellSize);*/
-        }
-        
-        public bool CanMove(Tile t, int num)
-        {
-            switch (num)
-            {
-                case 1:
-                    return t.Coord[0] == 0 || positions[t.Coord[0] - 1, t.Coord[1]] != 0;
-                case 2:
-                    return t.Coord[0] == 3 || positions[t.Coord[0] + 1, t.Coord[1]] != 0;
-                case 3:
-                    return t.Coord[1] == 0 || positions[t.Coord[0], t.Coord[1] - 1] != 0;
-                case 4:
-                    return t.Coord[1] == 3 || positions[t.Coord[0], t.Coord[1] + 1] != 0;
-                default:
-                    return false;
-            }
-        }
         public void NewTile()
         {
             Random r = new Random();
-            int[] x = new int[2];
+            int x;
+            int y;
             do
             {
-                x[0] = r.Next(0, 4);
-                x[1] = r.Next(0, 4);
+                x = r.Next(0, 4);
+                y = r.Next(0, 4);
             }
-            while (positions[x[0], x[1]] != 0);   
-            tiles.Add(new Tile(cellSize, 2, x, Color.Red, Color.Red));
-            positions[x[0], x[1]] = 2;
+            while (positions[x, y] != null);
+            positions[x, y] = new Tile(cellSize, 9 > r.Next(0, 10) ? 2 : 4, new int[] { x, y });
+            currentTiles++;
         }
     }
 }

@@ -89,6 +89,7 @@
       <DependentUpon>Minesweeper.cs</DependentUpon>
     </Compile>
     <Compile Include="Games\Tetris\Block.cs" />
+    <Compile Include="Games\Tetris\Board.cs" />
     <Compile Include="Games\Tetris\Shapes.cs" />
     <Compile Include="Games\Tetris\Tetrimino.cs" />
     <Compile Include="Games\Tetris\Tetris.cs">
@@ -128,6 +129,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -138,6 +140,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\ClearSans-Bold.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
