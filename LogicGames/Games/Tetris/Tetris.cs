@@ -37,8 +37,9 @@ namespace LogicGames.Games.Tetris
         {
             if (!currentShape.Move(0))
             {
-                board.SetBlocks(currentShape.BlocksInBoard);
-                for (int i = board.Size.Height-1; i >= 0 ; i--)
+                if(currentShape.Location.Y >= 0)
+                    board.SetBlocks(currentShape.BlocksInBoard);
+                for (int i = board.Size.Height-1; i >= 0; i--)
                 {
                     if (board.IsLineComplete(i))
                     {
@@ -46,7 +47,7 @@ namespace LogicGames.Games.Tetris
                         i++;
                     }
                 }
-
+                if (!currentShape.Moved || currentShape.Location.Y < 0) board = new Board(10,20,base.container);
                 currentShape = new Tetrimino(board, Shapes.Random());
             }
         }

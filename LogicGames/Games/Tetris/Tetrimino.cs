@@ -14,7 +14,8 @@ namespace LogicGames.Games.Tetris
 
         private int stateIndex;
         private List<bool[,]> states;
-        
+        public bool Moved { get; private set; }
+
         public Point Location { get; set; }
 
         private int blockSize;
@@ -24,13 +25,14 @@ namespace LogicGames.Games.Tetris
         public Tetrimino(Board board, Shapes.Shape shape)
         {
             this.board = board;
+            Moved = false;
 
             stateIndex = 0;
             this.color = shape.Color;
             this.border = shape.Border;
             this.blockSize = board.BlockSize;
 
-            this.Location = new Point(3, 0);
+            this.Location = new Point(3, -1);
             this.states = shape.Blocks;   
         }
 
@@ -77,6 +79,7 @@ namespace LogicGames.Games.Tetris
                         break;
                 }
             }
+            Moved = true;
             return true;
         }
 
@@ -124,7 +127,7 @@ namespace LogicGames.Games.Tetris
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (states[stateIndex][i, j])
+                    if (states[stateIndex][i, j] && Location.Y+j >= 0)
                     {
                         Block b = new Block(blockSize, color, border);
                         b.Location = new Point((this.Location.X + i) * blockSize, (this.Location.Y + j) * blockSize);

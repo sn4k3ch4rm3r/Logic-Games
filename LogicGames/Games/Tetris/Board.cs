@@ -29,7 +29,8 @@ namespace LogicGames.Games.Tetris
 
         public bool IsFilled(int x, int y)
         {
-            return boardState[x,y] != null;
+            if (y < 0) return false;
+            return boardState[x, y] != null;
         }
 
         public bool IsLineComplete(int line)
