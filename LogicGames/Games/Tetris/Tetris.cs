@@ -38,6 +38,15 @@ namespace LogicGames.Games.Tetris
             if (!currentShape.Move(0))
             {
                 board.SetBlocks(currentShape.BlocksInBoard);
+                for (int i = board.Size.Height-1; i >= 0 ; i--)
+                {
+                    if (board.IsLineComplete(i))
+                    {
+                        board.MoveDown(i);
+                        i++;
+                    }
+                }
+
                 currentShape = new Tetrimino(board, Shapes.Random());
             }
         }

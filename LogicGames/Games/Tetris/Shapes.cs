@@ -37,7 +37,7 @@ namespace LogicGames.Games.Tetris
                 }
             }
         }
-        private static Random rand = new Random(0);
+        private static Random rand = new Random();
         public static Shape O = new Shape(Color.Yellow, Color.SaddleBrown, new int[,]
             {
                 {
