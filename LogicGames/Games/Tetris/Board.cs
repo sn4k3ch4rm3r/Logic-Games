@@ -53,6 +53,22 @@ namespace LogicGames.Games.Tetris
             }
         }
 
+        public int Clear()
+        {
+            int lines = 0;
+            int i = Size.Height - 1;
+            while(i >= 0)
+            {
+                if (IsLineComplete(i))
+                {
+                    MoveDown(i);
+                    lines++;
+                }
+                else i--;
+            }
+            return lines;
+        }
+
         public void SetBlocks(Block[,] blocks)
         {
             for (int j = 0; j < boardHeight; j++)

@@ -20,6 +20,8 @@ namespace LogicGames.Games.Tetris
         private Board board;
         private Tetrimino currentShape;
 
+        private int score = 0;
+
         public Tetris() : base()
         {
             this.Text = "Tetris";
@@ -39,15 +41,16 @@ namespace LogicGames.Games.Tetris
             {
                 if(currentShape.Location.Y >= 0)
                     board.SetBlocks(currentShape.BlocksInBoard);
-                for (int i = board.Size.Height-1; i >= 0; i--)
+                
+                int linesCleared = board.Clear();
+                if(linesCleared > 0)
+                    score += (int)Math.Pow(2, linesCleared - 1) * 100;
+
+                if (!currentShape.Moved || currentShape.Location.Y < 0)
                 {
-                    if (board.IsLineComplete(i))
-                    {
-                        board.MoveDown(i);
-                        i++;
-                    }
+                    board = new Board(10, 20, base.container);
+                    score = 0;
                 }
-                if (!currentShape.Moved || currentShape.Location.Y < 0) board = new Board(10,20,base.container);
                 currentShape = new Tetrimino(board, Shapes.Random());
             }
         }
@@ -57,6 +60,7 @@ namespace LogicGames.Games.Tetris
             if(e.KeyCode == Keys.Down)
             {
                 MoveDown();
+                score += 2;
             }
             else if(e.KeyCode == Keys.Left)
             {
@@ -84,11 +88,14 @@ namespace LogicGames.Games.Tetris
             if(timePassed.TotalSeconds >= tickTime)
             {
                 MoveDown();
+                score++;
                 lastMoveTime = timer.Elapsed;
             }
 
             board.Render(g);
             currentShape.Render(g);
+
+            g.DrawString($"Score: {score}", new Font("Arial", 15), new SolidBrush(Color.Black), (int)(base.container.Width * (2.0 / 3)) + 10, 30);
 
             Invalidate();
         }
