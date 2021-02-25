@@ -20,7 +20,7 @@ namespace LogicGames.Games.Minesweeper
         }
 
         static int[,] field = new int[20,25]; //1 = mine, 0 = free space
-        static Button ClickedButton;
+        static Button LeftClickedButton, RightClickedButton;
         static bool generate = true;
 
         private void Button_Create()
@@ -46,8 +46,7 @@ namespace LogicGames.Games.Minesweeper
                         newButton.BackColor = Color.FromArgb(170, 215, 81);
                     }
                     dark = !dark;
-                    //newButton.Click += new System.EventHandler(MyButton_Click);
-                    newButton.MouseDown += new MouseEventHandler(MyButton_test);
+                    newButton.MouseDown += new MouseEventHandler(MyButton_Click);
                     newButton.Name = i.ToString() + "," + j.ToString();
                     this.Controls.Add(newButton);
                 }
@@ -169,22 +168,24 @@ namespace LogicGames.Games.Minesweeper
             }
             if (count > 0)
             {
-                ClickedButton.Text = Convert.ToString(count);
+                LeftClickedButton.Text = Convert.ToString(count);
             }
         }
 
-        private void MyButton_test(object sender, MouseEventArgs e)
+        private void MyButton_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                Button b = sender as Button;
-                MessageBox.Show(b.Name);
+                /*Button b = sender as Button; //Checking if right click works
+                MessageBox.Show(b.Name);*/
+                RightClickedButton = (Button)sender;
+                RightClickedButton.Text = "🏴";
             }
             else if (e.Button == MouseButtons.Left)
             {
                 //MessageBox.Show((sender as Button).Name); //Button name check
                 string name = (sender as Button).Name;
-                ClickedButton = (Button)sender;
+                LeftClickedButton = (Button)sender;
                 int column = GetCoords(name)[0];
                 int row = GetCoords(name)[1];
                 if (generate)
@@ -200,17 +201,67 @@ namespace LogicGames.Games.Minesweeper
                 //MessageBox.Show("Column: " + column + " Row: " + row); //Coordinate check
             }
         }
-
-        /*private void MyButton_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show((sender as Button).Name); //Button name check
-            string name = (sender as Button).Name;
-            ClickedButton = (Button)sender;
-            int column = GetCoords(name)[0];
-            int row = GetCoords(name)[1];
-            Mines_Generate(column, row);
-            check(column, row, 0);
-            //MessageBox.Show("Column: " + column + " Row: " + row); //Coordinate check
-        }*/
     }
 }
+/*
+if (row + 1 <= 24)
+            {
+                if (field[column, row + 1] == 1)
+                {
+                    count++;
+                }
+            }
+            if (row - 1 >= 0)
+            {
+                if (field[column, row - 1] == 1)
+                {
+                    count++;
+                }
+            }
+            if (column + 1 <= 19)
+            {
+                if (field[column + 1, row] == 1)
+                {
+                    count++;
+                }
+            }
+            if (column - 1 >= 0 && row + 1 <=24)
+            {
+                if (field[column - 1, row + 1] == 1)
+                {
+                    count++;
+                }
+            }
+            if (column + 1 <= 19 && row + 1 <= 24)
+            {
+                if (field[column + 1, row + 1] == 1)
+                {
+                    count++;
+                }
+            }
+            if (column - 1 >= 0 && row - 1 >= 0)
+            {
+                if (field[column - 1, row - 1] == 1)
+                {
+                    count++;
+                }
+            }
+            if (column - 1 >= 0 && row + 1 <= 24)
+            {
+                if (field[column - 1, row + 1] == 1)
+                {
+                    count++;
+                }
+            }
+            if (column + 1 <= 19 && row - 1 >= 0)
+            {
+                if (field[column + 1, row - 1] == 1)
+                {
+                    count++;
+                }
+            }
+            if (count > 0)
+            {
+                LeftClickedButton.Text = Convert.ToString(count);
+            }
+*/ //Back up of original Check function if i break everything :)
