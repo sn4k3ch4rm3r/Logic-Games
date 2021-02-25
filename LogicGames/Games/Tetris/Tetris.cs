@@ -7,15 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace LogicGames.Games.Tetris
 {
     public partial class Tetris : GameView
     {
-        private int boardWidth = 10;
-        private int boardHeight = 20;
-        private int blocksize;
-        private Tetrimino test;
+        private Stopwatch timer = new Stopwatch();
+        private TimeSpan lastMoveTime = new TimeSpan(0);
+        private float tickTime = 0.5f;
+
+        private Board board;
+        private Tetrimino currentShape;
+
         public Tetris() : base()
         {
             this.Text = "Tetris";
@@ -23,27 +27,38 @@ namespace LogicGames.Games.Tetris
             DoubleBuffered = true;
             this.KeyDown += OnKeyDown;
 
-            blocksize = (int)((double)base.container.Height / boardHeight);
-            test = new Tetrimino(blocksize, Shapes.Random());
+            board = new Board(10, 20, base.container);
+            currentShape = new Tetrimino(board, Shapes.Random());
+
+            timer.Start();
+        }
+
+        private void MoveDown()
+        {
+            if (!currentShape.Move(0))
+            {
+                board.SetBlocks(currentShape.BlocksInBoard);
+                currentShape = new Tetrimino(board, Shapes.Random());
+            }
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Down)
             {
-                test.Move(0);
+                MoveDown();
             }
             else if(e.KeyCode == Keys.Left)
             {
-                test.Move(-1);
+                currentShape.Move(-1);
             }
             else if (e.KeyCode == Keys.Right)
             {
-                test.Move(1);
+                currentShape.Move(1);
             }
             else if (e.KeyCode == Keys.Up)
             {
-                test.Move(2);
+                currentShape.Rotate();
             }
         }
 
@@ -55,18 +70,16 @@ namespace LogicGames.Games.Tetris
             g.FillRectangle(new SolidBrush(Color.Blue), base.container);
             g.TranslateTransform(base.container.X, base.container.Y);
 
-            //Draw the board
-            for (int i = 0; i < boardWidth; i++)
+            TimeSpan timePassed = timer.Elapsed - lastMoveTime;
+            if(timePassed.TotalSeconds >= tickTime)
             {
-                for (int j = 0; j < boardHeight; j++)
-                {
-                    Block b = new Block(blocksize, Color.White, Color.Black);
-                    b.Location = new Point(i*blocksize, j*blocksize);
-                    b.Render(g);
-                }
+                MoveDown();
+                lastMoveTime = timer.Elapsed;
             }
 
-            test.Render(g);
+            board.Render(g);
+            currentShape.Render(g);
+
             Invalidate();
         }
     }

@@ -11,15 +11,30 @@ namespace LogicGames.Games.Tetris
     {
         public struct Shape
         {
-            public int[,] Blocks { get; }
+            public List<bool[,]> Blocks { get; }
             public Color Color { get; }
             public Color Border { get; }
 
             public Shape(Color color, Color border, int[,] shape)
             {
-                this.Blocks = shape;
+                this.Blocks = new List<bool[,]>();
                 this.Color = color;
                 this.Border = border;
+
+                for (int i = 0; i < shape.Length / 4; i++)
+                {
+                    bool[,] blocks = new bool[4, 4];
+                    for (int j = 0; j < 4; j++)
+                    {
+                        string str = Convert.ToString(shape[i, j], 2).PadLeft(4, '0');
+                        bool[] blockPos = str.Select(s => s.Equals('1')).ToArray();
+                        for (int x = 0; x < blockPos.Length; x++)
+                        {
+                            blocks[x, j] = blockPos[x];
+                        }
+                    }
+                    this.Blocks.Add(blocks);
+                }
             }
         }
         private static Random rand = new Random(0);
