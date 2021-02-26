@@ -18,6 +18,7 @@ namespace LogicGames.Games.Minesweeper
         public Minesweeper() : base()
         {
             this.Text = "Aknakereső";
+            this.Resize += OnResize;
             btnArray = new Button[fieldSize.Width, fieldSize.Height];
             field = new int[fieldSize.Width, fieldSize.Height]; //1 = mine, 0 = free space
             Button_Create();
@@ -25,13 +26,14 @@ namespace LogicGames.Games.Minesweeper
 
         private Button RightClickedButton;
         private bool generate = true;
-        private Size fieldSize = new Size(10, 15);
+        private Size fieldSize = new Size(10, 10);
+        private int mineCount = 20;
+
+        private int cellSize;
 
         private void Button_Create()
         {
-            int width = base.container.Width / fieldSize.Width;
-            int height = base.container.Height / fieldSize.Height;
-            bool dark = true;
+            cellSize = base.container.Width / fieldSize.Width;
             for (int i = 0; i < fieldSize.Width; i++)
             {
                 for (int j = 0; j < fieldSize.Height; j++)
@@ -39,20 +41,13 @@ namespace LogicGames.Games.Minesweeper
                     Button newButton = new Button();
                     newButton.MouseDown += new MouseEventHandler(MyButton_Click);
                     newButton.Enabled = true;
-                    newButton.Location = new Point(width * i, height * j);
-                    newButton.Size = new Size(width, height);
+                    newButton.Location = new Point(base.container.Left + (cellSize * i), base.container.Top + (base.container.Height - (cellSize * fieldSize.Height)) + (cellSize * j));
+                    newButton.Size = new Size(cellSize, cellSize);
                     newButton.FlatStyle = new FlatStyle();
                     newButton.FlatAppearance.BorderSize = 0;
-                    if (dark)
-                    {
-                        newButton.BackColor = Color.FromArgb(162, 209, 73);
-                    }
-                    else
-                    {
-                        newButton.BackColor = Color.FromArgb(170, 215, 81);
-                    }
-                    dark = !dark;
+                    newButton.BackColor = (i + j) % 2 == 0 ? Color.FromArgb(170, 215, 81) : Color.FromArgb(162, 209, 73);
                     newButton.Name = i.ToString() + "," + j.ToString();
+
                     this.Controls.Add(newButton);
                     btnArray[i, j] = newButton;
                 }
@@ -65,7 +60,7 @@ namespace LogicGames.Games.Minesweeper
             Random rnd = new Random();
             int i = 0;
             List<string> already_mine = new List<string>();
-            while (i < 25)
+            while (i < mineCount)
             {
                 int column_add = rnd.Next(fieldSize.Width), row_add = rnd.Next(fieldSize.Height);
                 string coords = column_add.ToString() + "," + row_add.ToString();
@@ -109,21 +104,12 @@ namespace LogicGames.Games.Minesweeper
         public void Reset()
         {
             field = new int[fieldSize.Width, fieldSize.Height];
-            bool dark = true;
             for (int i = 0; i < fieldSize.Width; i++)
             {
                 for (int j = 0; j < fieldSize.Height; j++)
                 {
                     btnArray[i, j].Text = "";
-                    if (dark)
-                    {
-                        btnArray[i, j].BackColor = Color.FromArgb(162, 209, 73);
-                    }
-                    else
-                    {
-                        btnArray[i, j].BackColor = Color.FromArgb(170, 215, 81);
-                    }
-                    dark = !dark;
+                    btnArray[i, j].BackColor = (i + j) % 2 == 0 ? Color.FromArgb(170, 215, 81) : Color.FromArgb(162, 209, 73);
                     btnArray[i, j].Enabled = true;
                 }
             }
@@ -205,6 +191,21 @@ namespace LogicGames.Games.Minesweeper
                     return;
                 }
                 FindMines(column, row);
+            }
+        }
+
+        private void OnResize(object sender, EventArgs e)
+        {
+            for (int i = 0; i < fieldSize.Width; i++)
+            {
+                for (int j = 0; j < fieldSize.Height; j++)
+                {
+                    btnArray[i, j].Location = new Point
+                    (
+                        base.container.Left + (cellSize * i),
+                        base.container.Top + (base.container.Height - (cellSize * fieldSize.Height)) + (cellSize * j)
+                    );
+                }
             }
         }
     }
