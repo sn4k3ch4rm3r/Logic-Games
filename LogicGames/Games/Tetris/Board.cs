@@ -90,12 +90,17 @@ namespace LogicGames.Games.Tetris
                 for (int j = 0; j < boardHeight; j++)
                 {
                     Block b;
-                    if (boardState[i,j] == null)
-                        b = new Block(blockSize, Color.White, Color.Black);
+                    if (boardState[i, j] == null)
+                    {
+                        g.FillRectangle(new SolidBrush(Color.Black), i * blockSize, j * blockSize, blockSize, blockSize);
+                        g.DrawRectangle(new Pen(Color.FromArgb(20,20,20), 0.2f), i * blockSize, j * blockSize, blockSize, blockSize);
+                    }
                     else
+                    {
                         b = boardState[i, j];
-                    b.Location = new Point(i * blockSize, j * blockSize);
-                    b.Render(g);
+                        b.Location = new Point(i * blockSize, j * blockSize);
+                        b.Render(g);
+                    }
                 }
             }
         }
