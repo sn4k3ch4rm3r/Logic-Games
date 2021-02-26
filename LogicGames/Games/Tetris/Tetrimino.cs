@@ -43,7 +43,7 @@ namespace LogicGames.Games.Tetris
 
         public void MakeCurrent()
         {
-            Location = new Point(3,-1);
+            Location = new Point(3,-3);
             isCurrent = true;
         }
 
@@ -107,7 +107,6 @@ namespace LogicGames.Games.Tetris
                         (i + Location.X >= board.Size.Width
                         || i + Location.X < 0
                         || j + Location.Y >= board.Size.Height
-                        || j + Location.Y < 0
                         || board.IsFilled(i+Location.X, j+Location.Y))) return false;
                 }
             }
