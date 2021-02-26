@@ -92,7 +92,6 @@ namespace LogicGames.Games.Tetris
             base.OnPaint(e);
 
             Graphics g = e.Graphics;
-            g.FillRectangle(new SolidBrush(Color.Blue), base.container);
             g.TranslateTransform(base.container.X, base.container.Y);
 
             TimeSpan timePassed = timer.Elapsed - lastMoveTime;
@@ -106,7 +105,7 @@ namespace LogicGames.Games.Tetris
             board.Render(g);
             currentShape.Render(g);
             nextShape.Render(g);
-            g.DrawString($"Score: {score}", new Font("Arial", 15), new SolidBrush(Color.Black), (int)(base.container.Width * (2.0 / 3)) + 10, 30);
+            g.DrawString($"Score: {score}", new Font("Arial", 15), new SolidBrush(Resources.Colors.PrimaryText), (int)(base.container.Width * (2.0 / 3)) + 10, 30);
 
             Invalidate();
         }

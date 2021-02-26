@@ -228,8 +228,6 @@ namespace LogicGames.Games.Game2048
             TimeSpan currentFrameTime = frameTimer.Elapsed;
             float deltaTime = (float)(currentFrameTime - lastFrameTime).TotalSeconds;
 
-            e.Graphics.FillRectangle(new SolidBrush(Color.White), container);
-
             Render(e, deltaTime);
 
             lastFrameTime = currentFrameTime;
@@ -248,7 +246,7 @@ namespace LogicGames.Games.Game2048
                 g.DrawLine(p, 0, i * cellSize, 4 * cellSize, i * cellSize);
             }
             FontFamily font = new FontFamily("Arial");
-            g.DrawString($"Pont: {score}", new Font(font, 16, FontStyle.Bold), new SolidBrush(Color.Black), 10, -60);
+            g.DrawString($"Pont: {score}", new Font(font, 16, FontStyle.Bold), new SolidBrush(Resources.Colors.PrimaryText), 10, -60);
 
             if (positions.Length > 0)
             {

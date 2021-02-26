@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using LogicGames.Resources;
 
 namespace LogicGames.Games
 {
@@ -32,6 +33,13 @@ namespace LogicGames.Games
         private void SetContainerLocation()
         {
             container = new Rectangle((ClientRectangle.Width / 2) - (width / 2), (ClientRectangle.Height / 2) - (height / 2), width, height);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            this.BackColor = Colors.Background;
+            e.Graphics.FillRectangle(new SolidBrush(Colors.ContainterBackground), container);
         }
     }
 }
