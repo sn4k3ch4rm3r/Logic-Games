@@ -13,29 +13,34 @@ namespace LogicGames.Games.Minesweeper
 {
     public partial class Minesweeper : GameView
     {
+        Button[,] btnArray;
+        private int[,] field;
         public Minesweeper() : base()
         {
             this.Text = "Aknakereső";
+            btnArray = new Button[fieldSize.Width, fieldSize.Height];
+            field = new int[fieldSize.Width, fieldSize.Height]; //1 = mine, 0 = free space
             Button_Create();
         }
 
-        static int[,] field = new int[20,25]; //1 = mine, 0 = free space
-        System.Windows.Forms.Button[,] btnArray = new System.Windows.Forms.Button[20,25];
-        static Button LeftClickedButton, RightClickedButton;
-        static bool generate = true;
+        private Button RightClickedButton;
+        private bool generate = true;
+        private Size fieldSize = new Size(10, 15);
 
         private void Button_Create()
         {
-            int width = base.Width;
-            int height = base.Height;
+            int width = base.container.Width / fieldSize.Width;
+            int height = base.container.Height / fieldSize.Height;
             bool dark = true;
-            for (int i = 20; i >= 1; i--)
+            for (int i = 0; i < fieldSize.Width; i++)
             {
-                for (int j = 25; j >= 1; j--)
+                for (int j = 0; j < fieldSize.Height; j++)
                 {
                     Button newButton = new Button();
-                    newButton.Location = new Point((width / 20) * i, (height / 25) * j);
-                    newButton.Size = new Size(width / 20, height / 25);
+                    newButton.MouseDown += new MouseEventHandler(MyButton_Click);
+                    newButton.Enabled = true;
+                    newButton.Location = new Point(width * i, height * j);
+                    newButton.Size = new Size(width, height);
                     newButton.FlatStyle = new FlatStyle();
                     newButton.FlatAppearance.BorderSize = 0;
                     if (dark)
@@ -47,50 +52,41 @@ namespace LogicGames.Games.Minesweeper
                         newButton.BackColor = Color.FromArgb(170, 215, 81);
                     }
                     dark = !dark;
-                    newButton.MouseDown += new MouseEventHandler(MyButton_Click);
                     newButton.Name = i.ToString() + "," + j.ToString();
-                    btnArray[i - 1, j - 1] = newButton;
                     this.Controls.Add(newButton);
-                }
-            }
-        }
-
-        public void Reset(Control.ControlCollection ctrlCollection)
-        {
-            foreach (Control ctrl in ctrlCollection)
-            {
-                if (ctrl is Button)
-                {
-                    ctrl.Text = String.Empty;
+                    btnArray[i, j] = newButton;
                 }
             }
             generate = true;
         }
 
-        private void FillUp()
-        {
-            for (int i = 0; i < 20; i++)
-            {
-                for (int j = 0; j < 25; j++)
-                {
-                    field[i, j] = 0;
-                }
-            }
-        }
-
         private void Mines_Generate(int column, int row) //Changes the mines location's value to 1
         {
-            FillUp();
             Random rnd = new Random();
             int i = 0;
-            while (i < 20)
+            List<string> already_mine = new List<string>();
+            while (i < 25)
             {
-                int column_add = rnd.Next(1, 21);
-                int row_add = rnd.Next(1, 26);
+                int column_add = rnd.Next(fieldSize.Width), row_add = rnd.Next(fieldSize.Height);
+                string coords = column_add.ToString() + "," + row_add.ToString();
+                bool let_generate = true;
 
-                if (!(column == column_add && row == row_add))
+                for (int r = row - 1; r <= row + 1; r++)
                 {
-                    field[column_add - 1, row_add - 1] = 1;
+                    for (int c = column - 1; c <= column + 1; c++)
+                    {
+                        if (column_add == c && row_add == r)
+                        {
+                            let_generate = false;
+                        }
+                    }
+                }
+
+                if (let_generate == true && !already_mine.Contains(coords))
+                {
+                    field[column_add, row_add] = 1;
+                    already_mine.Add(coords);
+                    btnArray[column_add, row_add].Text = "A";
                     i++;
                 }
             }
@@ -99,7 +95,7 @@ namespace LogicGames.Games.Minesweeper
         private int[] GetCoords(string coords) //Seperates the button's name and gets the row's and column's value and returns them in an array
         {
             string[] coord = coords.Split(',');
-            int column = int.Parse(coord[0]);
+            int column = Convert.ToInt32(coord[0]);
             int row = int.Parse(coord[1]);
             return new int[] { column, row };
         }
@@ -107,127 +103,82 @@ namespace LogicGames.Games.Minesweeper
         private void Ending()
         {
             MessageBox.Show("Vége!");
-            Reset(this.Controls);
+            Reset();
         }
 
-        private void check(int column, int row, int count, int clicked_column, int clicked_row)
+        public void Reset()
         {
-            if (row + 1 <= 24)
+            field = new int[fieldSize.Width, fieldSize.Height];
+            bool dark = true;
+            for (int i = 0; i < fieldSize.Width; i++)
             {
-                if (field[column, row + 1] == 1)
+                for (int j = 0; j < fieldSize.Height; j++)
                 {
-                    count++;
+                    btnArray[i, j].Text = "";
+                    if (dark)
+                    {
+                        btnArray[i, j].BackColor = Color.FromArgb(162, 209, 73);
+                    }
+                    else
+                    {
+                        btnArray[i, j].BackColor = Color.FromArgb(170, 215, 81);
+                    }
+                    dark = !dark;
+                    btnArray[i, j].Enabled = true;
+                }
+            }
+            generate = true;
+        }
+
+        private bool isValid(int column, int row)
+        {
+            if (column <= fieldSize.Width - 1 && column >= 0 && row >= 0 && row <= fieldSize.Height - 1)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        private int check(int column, int row) //Checks if a tile is a mine in a 3x3 grid
+        {
+            int count = 0;
+            for (int i = column - 1; i <= column + 1; i++)
+            {
+                for (int j = row - 1; j <= row + 1; j++)
+                {
+                    if (isValid(i, j) && field[i, j] == 1)
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        private void FindMines(int column, int row)
+        {
+            if (btnArray[column, row].Enabled)
+            {
+                btnArray[column, row].Enabled = false;
+                btnArray[column, row].BackColor = (column + row) % 2 == 1 ? Color.FromArgb(215, 184, 153) : Color.FromArgb(229, 194, 159);
+                int count = check(column, row);
+                if (count == 0)
+                {
+                    for (int i = column - 1; i <= column + 1; i++)
+                    {
+                        for (int j = row - 1; j <= row + 1; j++)
+                        {
+                            if (isValid(i, j))
+                            {
+                                FindMines(i, j);
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    row++;
-                    check(column, row, 0, clicked_column, clicked_row);
+                    btnArray[column, row].Text = count.ToString();
                 }
-            }
-            if (row - 1 >= 0)
-            {
-                if (field[column, row - 1] == 1)
-                {
-                    count++;
-                }
-                else
-                {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    row--;
-                    check(column, row, 0, clicked_column, clicked_row);
-                }
-            }
-            if (column + 1 <= 19)
-            {
-                if (field[column + 1, row] == 1)
-                {
-                    count++;
-                }
-                else
-                {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    column++;
-                    check(column, row, 0, clicked_column, clicked_row);
-                }
-            }
-            if (column - 1 >= 00)
-            {
-                if (field[column + 1, row] == 1)
-                {
-                    count++;
-                }
-                else
-                {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    column--;
-                    check(column, row, 0, clicked_column, clicked_row);
-                }
-            }
-            if (column - 1 >= 0 && row + 1 <= 24)
-            {
-                if (field[column - 1, row + 1] == 1)
-                {
-                    count++;
-                }
-                else
-                {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    column--;
-                    row++;
-                    check(column, row, 0, clicked_column, clicked_row);
-                }
-            }
-            if (column + 1 <= 19 && row + 1 <= 24)
-            {
-                if (field[column + 1, row + 1] == 1)
-                {
-                    count++;
-                }
-                else
-                {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    column++;
-                    row++;
-                    check(column, row, 0, clicked_column, clicked_row);
-                }
-            }
-            if (column - 1 >= 0 && row - 1 >= 0)
-            {
-                if (field[column - 1, row - 1] == 1)
-                {
-                    count++;
-                }
-                else
-                {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    column--;
-                    row--;
-                    check(column, row, 0, clicked_column, clicked_row);
-                }
-            }
-            if (column + 1 <= 19 && row - 1 >= 0)
-            {
-                if (field[column + 1, row - 1] == 1)
-                {
-                    count++;
-                }
-                else
-                {
-                    btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
-                    column++;
-                    row--;
-                    check(column, row, 0, clicked_column, clicked_row);
-                }
-            }
-            if (count > 0)
-            {
-                btnArray[column, row].Text = Convert.ToString(count);
-                //check(clicked_column, clicked_row, 0, clicked_column, clicked_row, progress * -1);
-            }
-            else if (count == 0)
-            {
-                btnArray[column, row].BackColor = Color.FromArgb(215, 184, 153);
             }
         }
 
@@ -235,16 +186,12 @@ namespace LogicGames.Games.Minesweeper
         {
             if (e.Button == MouseButtons.Right)
             {
-                /*Button b = sender as Button; //Checking if right click works
-                MessageBox.Show(b.Name);*/
                 RightClickedButton = (Button)sender;
                 RightClickedButton.Text = "🏴";
             }
             else if (e.Button == MouseButtons.Left)
             {
-                //MessageBox.Show((sender as Button).Name); //Button name check
                 string name = (sender as Button).Name;
-                LeftClickedButton = (Button)sender;
                 int column = GetCoords(name)[0];
                 int row = GetCoords(name)[1];
                 if (generate)
@@ -252,76 +199,13 @@ namespace LogicGames.Games.Minesweeper
                     Mines_Generate(column, row);
                     generate = false;
                 }
-                if (field[column - 1, row - 1] == 1)
+                if (field[column, row] == 1)
                 {
                     Ending();
+                    return;
                 }
-                check(column - 1, row - 1, 0, column - 1, row - 1);
-                //MessageBox.Show("Column: " + column + " Row: " + row); //Coordinate check
+                FindMines(column, row);
             }
         }
     }
 }
-/*
-if (row + 1 <= 24)
-            {
-                if (field[column, row + 1] == 1)
-                {
-                    count++;
-                }
-            }
-            if (row - 1 >= 0)
-            {
-                if (field[column, row - 1] == 1)
-                {
-                    count++;
-                }
-            }
-            if (column + 1 <= 19)
-            {
-                if (field[column + 1, row] == 1)
-                {
-                    count++;
-                }
-            }
-            if (column - 1 >= 0 && row + 1 <=24)
-            {
-                if (field[column - 1, row + 1] == 1)
-                {
-                    count++;
-                }
-            }
-            if (column + 1 <= 19 && row + 1 <= 24)
-            {
-                if (field[column + 1, row + 1] == 1)
-                {
-                    count++;
-                }
-            }
-            if (column - 1 >= 0 && row - 1 >= 0)
-            {
-                if (field[column - 1, row - 1] == 1)
-                {
-                    count++;
-                }
-            }
-            if (column - 1 >= 0 && row + 1 <= 24)
-            {
-                if (field[column - 1, row + 1] == 1)
-                {
-                    count++;
-                }
-            }
-            if (column + 1 <= 19 && row - 1 >= 0)
-            {
-                if (field[column + 1, row - 1] == 1)
-                {
-                    count++;
-                }
-            }
-            if (count > 0)
-            {
-                LeftClickedButton.Text = Convert.ToString(count);
-            }
-            //LeftClickedButton.BackColor = Color.FromArgb(215, 184, 153);
-*/ //Back up of original Check function if i break everything :)
