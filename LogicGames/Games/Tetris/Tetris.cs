@@ -23,6 +23,7 @@ namespace LogicGames.Games.Tetris
         private Tetrimino nextShape;
 
         private int score = 0;
+        private int lines = 0;
 
         public Tetris() : base()
         {
@@ -53,8 +54,11 @@ namespace LogicGames.Games.Tetris
                     board.SetBlocks(currentShape.BlocksInBoard);
                 
                 int linesCleared = board.Clear();
-                if(linesCleared > 0)
+                if (linesCleared > 0)
+                {
                     score += (int)Math.Pow(2, linesCleared - 1) * 100;
+                    lines += linesCleared;
+                }
 
                 if (!currentShape.Moved || currentShape.Location.Y < 0)
                 {
@@ -105,7 +109,14 @@ namespace LogicGames.Games.Tetris
             board.Render(g);
             currentShape.Render(g);
             nextShape.Render(g);
-            g.DrawString($"Score: {score}", new Font("Arial", 15), new SolidBrush(Resources.Colors.PrimaryText), (int)(base.container.Width * (2.0 / 3)) + 10, 30);
+
+            Font font = new Font("Arial", 15);
+            SolidBrush textBrush = new SolidBrush(Resources.Colors.PrimaryText);
+            SizeF stringSize = g.MeasureString("Következő:", font);
+            int beginText = board.NextDisplayRect.Left - 3;
+
+            g.DrawString("Következő:", font, textBrush, beginText, board.NextDisplayRect.Top - stringSize.Height);
+            g.DrawString($"Pontszám: {score}\nSorok: {lines}", font, textBrush, beginText, 30);
 
             Invalidate();
         }

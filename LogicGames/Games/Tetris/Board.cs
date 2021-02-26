@@ -89,7 +89,7 @@ namespace LogicGames.Games.Tetris
 
         public void Render(Graphics g)
         {
-            g.DrawRectangle(new Pen(Color.Pink, 1), NextDisplayRect);
+            g.FillRectangle(new SolidBrush(Color.FromArgb(88, 110, 117)), NextDisplayRect);
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)
