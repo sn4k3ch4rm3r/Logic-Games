@@ -17,9 +17,13 @@ namespace LogicGames.Games.Tetris
         public bool Moved { get; private set; }
 
         public Point Location { get; set; }
+        public Point RenderLocation { get; set; }
 
         private int blockSize;
         private Shapes.Shape shape;
+
+        private bool isCurrent = false;
+
         public Tetrimino(Board board, Shapes.Shape shape)
         {
             this.board = board;
@@ -29,8 +33,18 @@ namespace LogicGames.Games.Tetris
             this.shape = shape;
             this.blockSize = board.BlockSize;
 
-            this.Location = new Point(3, -1);
-            this.states = shape.Blocks;   
+            RenderLocation = new Point(
+                board.NextDisplayRect.Left + ((board.NextDisplayRect.Width / 2) - ((shape.Size.Width * blockSize) / 2)),
+                board.NextDisplayRect.Top + ((board.NextDisplayRect.Height / 2) - ((shape.Size.Height * blockSize) / 2))
+            );
+            this.Location = new Point(0,0);
+            this.states = shape.Blocks;
+        }
+
+        public void MakeCurrent()
+        {
+            Location = new Point(3,-1);
+            isCurrent = true;
         }
 
         public bool Move(int direction)
@@ -127,7 +141,10 @@ namespace LogicGames.Games.Tetris
                     if (states[stateIndex][i, j] && Location.Y+j >= 0)
                     {
                         Block b = new Block(blockSize, shape.Color, shape.SideColor, shape.TopColor, shape.BottomColor);
-                        b.Location = new Point((this.Location.X + i) * blockSize, (this.Location.Y + j) * blockSize);
+                        if(isCurrent)
+                            b.Location = new Point((this.Location.X + i) * blockSize, (this.Location.Y + j) * blockSize);
+                        else
+                            b.Location = new Point(RenderLocation.X + (i * blockSize), RenderLocation.Y + (j * blockSize));
                         b.Render(g);
                     }
                 }

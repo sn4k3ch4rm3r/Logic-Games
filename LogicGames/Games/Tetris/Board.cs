@@ -17,6 +17,7 @@ namespace LogicGames.Games.Tetris
 
         public int BlockSize { get { return blockSize; } }
         public Size Size { get { return new Size(boardWidth, boardHeight); } }
+        public Rectangle NextDisplayRect { get; }
 
         public Board(int width, int height, Rectangle container)
         {
@@ -25,6 +26,9 @@ namespace LogicGames.Games.Tetris
 
             blockSize = (int)((double)container.Height / boardHeight);
             boardState = new Block[width, height];
+
+            Size displaySize = new Size(4 * blockSize, 4 * blockSize);
+            NextDisplayRect = new Rectangle(new Point((boardWidth * blockSize) + ((container.Width - (boardWidth * blockSize)) / 2) - (displaySize.Width/2), (container.Height/2)-(displaySize.Height/2)),displaySize);
         }
 
         public bool IsFilled(int x, int y)
@@ -85,6 +89,7 @@ namespace LogicGames.Games.Tetris
 
         public void Render(Graphics g)
         {
+            g.DrawRectangle(new Pen(Color.Pink, 1), NextDisplayRect);
             for (int i = 0; i < boardWidth; i++)
             {
                 for (int j = 0; j < boardHeight; j++)

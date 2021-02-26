@@ -18,7 +18,9 @@ namespace LogicGames.Games.Tetris
         private float tickTime = 0.5f;
 
         private Board board;
+
         private Tetrimino currentShape;
+        private Tetrimino nextShape;
 
         private int score = 0;
 
@@ -30,9 +32,17 @@ namespace LogicGames.Games.Tetris
             this.KeyDown += OnKeyDown;
 
             board = new Board(10, 20, base.container);
-            currentShape = new Tetrimino(board, Shapes.Random());
+            nextShape = new Tetrimino(board, Shapes.Random());
+            NextShape();
 
             timer.Start();
+        }
+
+        private void NextShape()
+        {
+            currentShape = nextShape;
+            currentShape.MakeCurrent();
+            nextShape = new Tetrimino(board, Shapes.Random());
         }
 
         private void MoveDown()
@@ -49,9 +59,10 @@ namespace LogicGames.Games.Tetris
                 if (!currentShape.Moved || currentShape.Location.Y < 0)
                 {
                     board = new Board(10, 20, base.container);
+                    nextShape = new Tetrimino(board, Shapes.Random());
                     score = 0;
                 }
-                currentShape = new Tetrimino(board, Shapes.Random());
+                NextShape();
             }
         }
 
@@ -94,7 +105,7 @@ namespace LogicGames.Games.Tetris
 
             board.Render(g);
             currentShape.Render(g);
-
+            nextShape.Render(g);
             g.DrawString($"Score: {score}", new Font("Arial", 15), new SolidBrush(Color.Black), (int)(base.container.Width * (2.0 / 3)) + 10, 30);
 
             Invalidate();
