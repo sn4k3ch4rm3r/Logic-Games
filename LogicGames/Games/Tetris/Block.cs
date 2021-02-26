@@ -11,25 +11,37 @@ namespace LogicGames.Games.Tetris
     class Block
     {
         private SolidBrush color;
-        private Pen border;
+
+        private Color sideColor;
+        private Color topColor;
+        private Color bottomColor;
+        private int borderWidth;
         public Point Location { get; set; }
         public Size Size { get; set; }
 
-        public Block(int size, Color color, Color border, int borderWidth = 1)
+        public Block(int size, Color color, Color borderSide, Color borderTop, Color borderBottom, int borderWidth = 3)
         {
             this.Size = new Size(size, size);
             this.Location = new Point(0, 0);
 
             this.color = new SolidBrush(color);
-            this.border = new Pen(border, borderWidth);
-            this.border.Alignment = System.Drawing.Drawing2D.PenAlignment.Inset;
+
+            this.sideColor = borderSide;
+            this.topColor = borderTop;
+            this.bottomColor = borderBottom;
+
+            this.borderWidth = borderWidth;
         }
 
         public void Render(Graphics g)
         {
             Rectangle rectangle = new Rectangle(this.Location, this.Size);
             g.FillRectangle(color, rectangle);
-            g.DrawRectangle(border, rectangle);
+            ControlPaint.DrawBorder(g, rectangle,
+                sideColor, borderWidth, ButtonBorderStyle.Solid,
+                topColor, borderWidth, ButtonBorderStyle.Solid,
+                sideColor, borderWidth, ButtonBorderStyle.Solid,
+                bottomColor, borderWidth, ButtonBorderStyle.Solid);
         }
     }
 }

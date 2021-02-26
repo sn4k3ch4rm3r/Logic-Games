@@ -19,17 +19,14 @@ namespace LogicGames.Games.Tetris
         public Point Location { get; set; }
 
         private int blockSize;
-        private Color color;
-        private Color border;
-
+        private Shapes.Shape shape;
         public Tetrimino(Board board, Shapes.Shape shape)
         {
             this.board = board;
             Moved = false;
 
             stateIndex = 0;
-            this.color = shape.Color;
-            this.border = shape.Border;
+            this.shape = shape;
             this.blockSize = board.BlockSize;
 
             this.Location = new Point(3, -1);
@@ -114,7 +111,7 @@ namespace LogicGames.Games.Tetris
                     for (int i = 0; i < 4; i++)
                     {
                         if (states[stateIndex][i,j])
-                            shapeOnBoard[Location.X + i, Location.Y + j] = new Block(board.BlockSize, color, border);
+                            shapeOnBoard[Location.X + i, Location.Y + j] = new Block(board.BlockSize, shape.Color, shape.SideColor, shape.TopColor, shape.BottomColor);
                     }
                 }
                 return shapeOnBoard;
@@ -129,7 +126,7 @@ namespace LogicGames.Games.Tetris
                 {
                     if (states[stateIndex][i, j] && Location.Y+j >= 0)
                     {
-                        Block b = new Block(blockSize, color, border);
+                        Block b = new Block(blockSize, shape.Color, shape.SideColor, shape.TopColor, shape.BottomColor);
                         b.Location = new Point((this.Location.X + i) * blockSize, (this.Location.Y + j) * blockSize);
                         b.Render(g);
                     }
