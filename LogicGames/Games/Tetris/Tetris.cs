@@ -25,6 +25,8 @@ namespace LogicGames.Games.Tetris
         private int score = 0;
         private int lines = 0;
 
+        private bool gameOver = false;
+
         public Tetris() : base()
         {
             this.Text = "Tetris";
@@ -61,11 +63,7 @@ namespace LogicGames.Games.Tetris
                 }
 
                 if (!currentShape.Moved || currentShape.Location.Y < 0)
-                {
-                    board = new Board(10, 20, base.container);
-                    nextShape = new Tetrimino(board, Shapes.Random());
-                    score = 0;
-                }
+                    GameOver();
                 NextShape();
             }
         }
@@ -91,6 +89,31 @@ namespace LogicGames.Games.Tetris
             }
         }
 
+        private void GameOver()
+        {
+            gameOver = true;
+            Menus.GameMenu gameOverMenu = new Menus.GameMenu("Új játék", "Kilépés");
+            base.ShowMenu(gameOverMenu);
+        }
+
+        protected override void MenuSelected(int selected)
+        {
+            switch(selected)
+            {
+                case 0:
+                    board = new Board(10, 20, base.container);
+                    nextShape = new Tetrimino(board, Shapes.Random());
+                    NextShape();
+                    score = 0;
+                    lines = 0;
+                    gameOver = false;
+                    break;
+                default:
+                    this.Close();
+                    break;
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -99,7 +122,7 @@ namespace LogicGames.Games.Tetris
             g.TranslateTransform(base.container.X, base.container.Y);
 
             TimeSpan timePassed = timer.Elapsed - lastMoveTime;
-            if(timePassed.TotalSeconds >= tickTime)
+            if (timePassed.TotalSeconds >= tickTime)
             {
                 MoveDown();
                 score++;
@@ -117,8 +140,9 @@ namespace LogicGames.Games.Tetris
 
             g.DrawString("Következő:", font, textBrush, beginText, board.NextDisplayRect.Top - stringSize.Height);
             g.DrawString($"Pontszám: {score}\nSorok: {lines}", font, textBrush, beginText, 30);
-
-            Invalidate();
+            if(!gameOver) { 
+                Invalidate();
+            }
         }
     }
 }

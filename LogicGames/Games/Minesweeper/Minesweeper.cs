@@ -97,8 +97,7 @@ namespace LogicGames.Games.Minesweeper
 
         private void Ending()
         {
-            MessageBox.Show("Vége!");
-            Reset();
+            base.ShowMenu(new Menus.GameMenu("Új játék", "Kilépés"));
         }
 
         public void Reset()
@@ -191,6 +190,19 @@ namespace LogicGames.Games.Minesweeper
                     return;
                 }
                 FindMines(column, row);
+            }
+        }
+
+        protected override void MenuSelected(int selected)
+        {
+            switch(selected)
+            {
+                case 0:
+                    Reset();
+                    break;
+                case 1:
+                    this.Close();
+                    break;
             }
         }
 
