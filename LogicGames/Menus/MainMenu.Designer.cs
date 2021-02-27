@@ -1,5 +1,4 @@
-﻿
-namespace LogicGames
+﻿namespace LogicGames.Menus
 {
     partial class MainMenu
     {

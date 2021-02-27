@@ -98,10 +98,16 @@
     <Compile Include="Games\Tetris\Tetris.Designer.cs">
       <DependentUpon>Tetris.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainMenu\MainMenu.cs">
+    <Compile Include="Menus\GameMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenu\MainMenu.Designer.cs">
+    <Compile Include="Menus\GameMenu.Designer.cs">
+      <DependentUpon>GameMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Menus\MainMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menus\MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -119,7 +125,10 @@
     <EmbeddedResource Include="Games\Tetris\Tetris.resx">
       <DependentUpon>Tetris.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainMenu\MainMenu.resx">
+    <EmbeddedResource Include="Menus\GameMenu.resx">
+      <DependentUpon>GameMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menus\MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

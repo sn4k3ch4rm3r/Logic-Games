@@ -11,7 +11,7 @@ using LogicGames.Games.Game2048;
 using LogicGames.Games.Minesweeper;
 using LogicGames.Games.Tetris;
 
-namespace LogicGames
+namespace LogicGames.Menus
 {
     public partial class MainMenu : Form
     {

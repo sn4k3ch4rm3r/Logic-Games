@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using LogicGames.Resources;
+using LogicGames.Menus;
 
 namespace LogicGames.Games
 {
@@ -22,6 +23,7 @@ namespace LogicGames.Games
         {
             InitializeComponent();
             SetContainerLocation();
+            menu_panel.Hide();
             this.Resize += onResize;
         }
 
@@ -33,7 +35,33 @@ namespace LogicGames.Games
         private void SetContainerLocation()
         {
             container = new Rectangle((ClientRectangle.Width / 2) - (width / 2), (ClientRectangle.Height / 2) - (height / 2), width, height);
+            menu_panel.Location = new Point
+            (
+                (this.ClientRectangle.Width / 2) - (menu_panel.Size.Width / 2),
+                (this.ClientRectangle.Height / 2) - (menu_panel.Size.Height / 2)
+            );
         }
+
+        protected void ShowMenu(GameMenu menu)
+        {
+            menu_panel.Controls.Add(menu);
+            menu_panel.Size = menu.ContentSize;
+            SetContainerLocation();
+            menu.FormClosed += MenuButtonClicked;
+            menu.Show();
+            menu_panel.Show();
+        }
+
+        private void MenuButtonClicked(object sender, EventArgs e) 
+        {
+            GameMenu menu = sender as GameMenu;
+            menu_panel.Hide();
+            this.Focus();
+            MenuSelected(menu.Selected);
+            Invalidate();
+        }
+
+        protected virtual void MenuSelected(int selected) { }
 
         protected override void OnPaint(PaintEventArgs e)
         {

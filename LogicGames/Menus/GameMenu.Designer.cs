@@ -1,7 +1,7 @@
 ﻿
-namespace LogicGames.Games
+namespace LogicGames.Menus
 {
-    partial class GameView
+    partial class GameMenu
     {
         /// <summary>
         /// Required designer variable.
@@ -29,30 +29,19 @@ namespace LogicGames.Games
         /// </summary>
         private void InitializeComponent()
         {
-            this.menu_panel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
-            // menu_panel
-            // 
-            this.menu_panel.Location = new System.Drawing.Point(279, 133);
-            this.menu_panel.Name = "menu_panel";
-            this.menu_panel.Size = new System.Drawing.Size(168, 207);
-            this.menu_panel.TabIndex = 0;
-            // 
-            // GameView
+            // GameMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(751, 784);
-            this.Controls.Add(this.menu_panel);
-            this.Name = "GameView";
-            this.Text = "GameView";
+            this.ClientSize = new System.Drawing.Size(605, 448);
+            this.Name = "GameMenu";
+            this.Text = "GameOverForm";
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel menu_panel;
     }
 }
