@@ -14,22 +14,56 @@ namespace LogicGames.Games.Minesweeper
     public partial class Minesweeper : GameView
     {
         Button[,] btnArray;
+        Label mineCount_l = new Label();
+        Label tmr = new Label();
+
+        Timer timer = new Timer();
+        private int timerCounter;
         private int[,] field;
+        private Color[] colors = {Color.Blue, Color.Green, Color.Red, Color.Purple, Color.Maroon, Color.Turquoise, Color.Black, Color.Gray};
         public Minesweeper() : base()
         {
             this.Text = "Aknakereső";
             this.Resize += OnResize;
             btnArray = new Button[fieldSize.Width, fieldSize.Height];
             field = new int[fieldSize.Width, fieldSize.Height]; //1 = mine, 0 = free space
+            timer.Interval = 1000;
+            timer.Tick += new EventHandler(Timer_Tick);
+            Label_Create();
             Button_Create();
         }
 
-        private Button RightClickedButton;
         private bool generate = true;
-        private Size fieldSize = new Size(10, 10);
-        private int mineCount = 20;
+        private Size fieldSize = new Size(15, 15);
+        private Size labelSize = new Size(120, 45);
+        private int mineCount = 33;
+        private int leftOverMines = 33;
 
         private int cellSize;
+
+        private void Label_Create()
+        {
+            mineCount_l.Location = new Point(base.container.Left, base.container.Top);
+            mineCount_l.Size = new Size(labelSize.Width, labelSize.Height);
+            mineCount_l.Font = new Font("Arial", 18, FontStyle.Bold);
+            mineCount_l.BackColor = Resources.Colors.ContainterBackground;
+            mineCount_l.ForeColor = Resources.Colors.PrimaryText;
+            mineCount_l.Text = $"🏴: {mineCount}";
+            this.Controls.Add(mineCount_l);
+            tmr.Location = new Point(base.container.Right - mineCount_l.Width, base.container.Top);
+            tmr.Size = new Size(labelSize.Width, labelSize.Height);
+            tmr.Font = new Font("Arial", 18, FontStyle.Bold);
+            tmr.BackColor = Resources.Colors.ContainterBackground;
+            tmr.ForeColor = Resources.Colors.PrimaryText;
+            tmr.Text = "⏰: 0";
+            this.Controls.Add(tmr);
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            timerCounter++;
+            tmr.Text = "⏰: " + timerCounter.ToString();
+        }
 
         private void Button_Create()
         {
@@ -39,6 +73,7 @@ namespace LogicGames.Games.Minesweeper
                 for (int j = 0; j < fieldSize.Height; j++)
                 {
                     Button newButton = new Button();
+                    newButton.Font = new Font("Arial", 18, FontStyle.Bold);
                     newButton.MouseDown += new MouseEventHandler(MyButton_Click);
                     newButton.Enabled = true;
                     newButton.Location = new Point(base.container.Left + (cellSize * i), base.container.Top + (base.container.Height - (cellSize * fieldSize.Height)) + (cellSize * j));
@@ -47,7 +82,6 @@ namespace LogicGames.Games.Minesweeper
                     newButton.FlatAppearance.BorderSize = 0;
                     newButton.BackColor = (i + j) % 2 == 0 ? Color.FromArgb(170, 215, 81) : Color.FromArgb(162, 209, 73);
                     newButton.Name = i.ToString() + "," + j.ToString();
-
                     this.Controls.Add(newButton);
                     btnArray[i, j] = newButton;
                 }
@@ -100,6 +134,21 @@ namespace LogicGames.Games.Minesweeper
             base.ShowMenu(new Menus.GameMenu("Új játék", "Kilépés"));
         }
 
+        private bool didWin()
+        {
+            for (int i = 0; i < fieldSize.Width; i++)
+            {
+                for (int j = 0; j < fieldSize.Height; j++)
+                {
+                    if ((btnArray[i, j].BackColor == Color.FromArgb(170, 215, 81) || btnArray[i, j].BackColor == Color.FromArgb(162, 209, 73)) && field[i, j] != 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         public void Reset()
         {
             field = new int[fieldSize.Width, fieldSize.Height];
@@ -109,10 +158,16 @@ namespace LogicGames.Games.Minesweeper
                 {
                     btnArray[i, j].Text = "";
                     btnArray[i, j].BackColor = (i + j) % 2 == 0 ? Color.FromArgb(170, 215, 81) : Color.FromArgb(162, 209, 73);
+                    btnArray[i, j].ForeColor = Color.Black;
                     btnArray[i, j].Enabled = true;
                 }
             }
             generate = true;
+            timerCounter = 0;
+            tmr.Text = "⏰: 0";
+            mineCount = 33;
+            leftOverMines = 33;
+            mineCount_l.Text = $"🏴: {mineCount}";
         }
 
         private bool isValid(int column, int row)
@@ -162,34 +217,68 @@ namespace LogicGames.Games.Minesweeper
                 }
                 else
                 {
+                    btnArray[column, row].ForeColor = colors[count - 1];
                     btnArray[column, row].Text = count.ToString();
+                }
+            }
+        }
+
+        private void checkLeftMines()
+        {
+            for (int i = 0; i < fieldSize.Width; i++)
+            {
+                for (int j = 0; j < fieldSize.Height; j++)
+                {
+                    if ((field[i, j] == 1) && (btnArray[i, j].Text == "🏴"))
+                    {
+                        leftOverMines--;
+                    }
                 }
             }
         }
 
         private void MyButton_Click(object sender, MouseEventArgs e)
         {
+            Button clickedButton = sender as Button;
             if (e.Button == MouseButtons.Right)
             {
-                RightClickedButton = (Button)sender;
-                RightClickedButton.Text = "🏴";
+                if (clickedButton.Text == "🏴")
+                {
+                    clickedButton.Text = "";
+                }
+                else
+                {
+                    mineCount--;
+                    mineCount_l.Text = $"🏴: {mineCount}";
+                    clickedButton.Text = "🏴";
+                }
+                clickedButton.ForeColor = Color.Red;
             }
-            else if (e.Button == MouseButtons.Left)
+            else if (e.Button == MouseButtons.Left && clickedButton.Text != "🏴")
             {
-                string name = (sender as Button).Name;
+                string name = clickedButton.Name;
                 int column = GetCoords(name)[0];
                 int row = GetCoords(name)[1];
                 if (generate)
                 {
                     Mines_Generate(column, row);
                     generate = false;
+                    timer.Enabled = true;
                 }
                 if (field[column, row] == 1)
                 {
+                    timer.Enabled = false;
+                    checkLeftMines();
+                    MessageBox.Show($"Vesztettél!\nJátékban töltött idő: {timerCounter}s\nHátralévő bombák: {leftOverMines}");
                     Ending();
                     return;
                 }
                 FindMines(column, row);
+                if (didWin())
+                {
+                    MessageBox.Show("Nyertél!");
+                    Ending();
+                }
             }
         }
 
@@ -219,6 +308,8 @@ namespace LogicGames.Games.Minesweeper
                     );
                 }
             }
+            mineCount_l.Location = new Point(base.container.Left, base.container.Top);
+            tmr.Location = new Point(base.container.Right - mineCount_l.Width, base.container.Top);
         }
     }
 }
