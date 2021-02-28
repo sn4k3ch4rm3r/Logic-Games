@@ -38,7 +38,6 @@ namespace LogicGames.Games.Game2048
             this.ClientSize = new System.Drawing.Size(600, 366);
             this.Name = "Game2048";
             this.Text = "Game2048";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Game2048_KeyDown);
             this.ResumeLayout(false);
 
         }

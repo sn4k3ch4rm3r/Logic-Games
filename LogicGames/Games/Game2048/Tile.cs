@@ -43,7 +43,6 @@ namespace LogicGames.Games.Game2048
             Rectangle rectangle = new Rectangle(Coord[0] * Size.Width, Coord[1] * Size.Height, Size.Width, Size.Height);
             g.FillRectangle(new SolidBrush(value <= 2048 ? colors[(int)Math.Log(value, 2) - 1] : Color.FromArgb(60, 58, 50)), rectangle);
             g.DrawString(value.ToString(), font, new SolidBrush(value < 8 ? Color.Black : Color.White), (Coord[0] * Size.Width) + (Size.Width / 2) - (sizef.Width / 2), (Coord[1] * Size.Height) + (Size.Height / 2) - (sizef.Height / 2));
-            
         }
     }
 }
