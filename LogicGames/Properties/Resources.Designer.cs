@@ -69,5 +69,14 @@ namespace LogicGames.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Tetris_99_Main_Theme {
+            get {
+                return ResourceManager.GetStream("Tetris_99_Main_Theme", resourceCulture);
+            }
+        }
     }
 }

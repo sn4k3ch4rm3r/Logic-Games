@@ -25,6 +25,8 @@ namespace LogicGames.Games
             SetContainerLocation();
             menu_panel.Hide();
             this.Resize += onResize;
+            this.KeyPreview= true;
+            this.PreviewKeyDown += new PreviewKeyDownEventHandler(OnKeyDown);
         }
 
         private void onResize(object sender, EventArgs e)
@@ -59,6 +61,14 @@ namespace LogicGames.Games
             this.Focus();
             MenuSelected(menu.Selected);
             Invalidate();
+        }
+
+        private void OnKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if(e.KeyCode == Keys.Escape)
+            {
+                this.Close();
+            }
         }
 
         protected virtual void MenuSelected(int selected) { }
