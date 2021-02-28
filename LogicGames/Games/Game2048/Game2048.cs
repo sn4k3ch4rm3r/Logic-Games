@@ -12,48 +12,77 @@ namespace LogicGames.Games.Game2048
         private int currentTiles;
         private int cellSize;
         private bool anyMove;
+        private bool didWin = false;
+        private bool seenMenu = false;
+        private bool isMenuShowing = false;
         Tile[,] positions = new Tile[4, 4];
         public Game2048() : base()
         {
             this.Text = "2048";
-            this.KeyDown += Game2048_KeyDown;
+            this.PreviewKeyDown += new PreviewKeyDownEventHandler(Game2048_KeyDown);
             DoubleBuffered = true;
             cellSize = base.container.Width / 4;
-            NewTile();
-            NewTile();
+            NewTile(2);
         }
 
-        private void Game2048_KeyDown(object sender, KeyEventArgs e)
+        private void Game2048_KeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            if (isMenuShowing) return;
             anyMove = false;
             switch (e.KeyCode)
             {
                 case Keys.Left:
-                    moveLeft();
+                    MoveLeft();
                     break;
                 case Keys.Right:
-                    moveRight();
+                    MoveRight();
                     break;
                 case Keys.Up:
-                    moveUp();
+                    MoveUp();
                     break;
                 case Keys.Down:
-                    
+                    MoveDown();
                     break;
             }
             if (anyMove)
             {
-                NewTile();
+                NewTile(1);
+            }
+            if (didWin && !seenMenu)
+            {
+                isMenuShowing = true;
+                base.ShowMenu(new Menus.GameMenu("Folytatás", "Új játék", "Kilépés"));
             }
             if (currentTiles == 16 && gameOver())
             {
-                score = 0;
-                positions = new Tile[4, 4];
-                currentTiles = 0;
-                NewTile();
+                isMenuShowing = true;
+                base.ShowMenu(new Menus.GameMenu("Új játék", "Kilépés"));
             }
         }
-        public void moveLeft()
+
+        protected override void MenuSelected(int selected)
+        {
+            if (((!didWin || seenMenu) && selected == 0) || (!seenMenu && didWin && selected == 1))
+            {
+                positions = new Tile[4, 4];
+                score = 0;
+                currentTiles = 0;
+                seenMenu = false;
+                didWin = false;
+                isMenuShowing = false;
+                NewTile(2);
+                return;
+            }
+            else if (((!didWin || seenMenu) && selected == 1) || (didWin && selected == 2))
+            {
+                this.Close();
+            }
+            seenMenu = true;
+            didWin = false;
+            isMenuShowing = false;
+        }
+
+        public void MoveLeft()
         {
             for (int j = 0; j < 4; j++)
             {
@@ -81,6 +110,10 @@ namespace LogicGames.Games.Game2048
                                 positions[i - x, j].value *= 2;
                                 score += positions[i - x, j].value;
                                 currentTiles--;
+                                if (positions[i - x, j].value == 2048 && !didWin)
+                                {
+                                    didWin = true;
+                                }
                             }
                             anyMove = true;
                         }
@@ -88,7 +121,7 @@ namespace LogicGames.Games.Game2048
                 }
             }
         }
-        public void moveRight()
+        public void MoveRight()
         {
             for (int j = 0; j < 4; j++)
             {
@@ -116,6 +149,10 @@ namespace LogicGames.Games.Game2048
                                 positions[i + x, j].value *= 2;
                                 score += positions[i + x, j].value;
                                 currentTiles--;
+                                if (positions[i + x, j].value == 2048 && !didWin)
+                                {
+                                    didWin = true;
+                                }
                             }
                             anyMove = true;
                         }
@@ -124,7 +161,7 @@ namespace LogicGames.Games.Game2048
             }
         }
 
-        public void moveUp()
+        public void MoveUp()
         {
             for (int j = 0; j < 4; j++)
             {
@@ -152,6 +189,10 @@ namespace LogicGames.Games.Game2048
                                 positions[i, j - x].value *= 2;
                                 score += positions[i, j - x].value;
                                 currentTiles--;
+                                if (positions[i, j - x].value == 2048 && !didWin)
+                                {
+                                    didWin = true;
+                                }
                             }
                             anyMove = true;
                         }
@@ -160,7 +201,7 @@ namespace LogicGames.Games.Game2048
             }
         }
 
-        public void moveDown()
+        public void MoveDown()
         {
             for (int j = 3; j >= 0; j--)
             {
@@ -188,6 +229,10 @@ namespace LogicGames.Games.Game2048
                                 positions[i, j + x].value *= 2;
                                 score += positions[i, j + x].value;
                                 currentTiles--;
+                                if (positions[i, j + x].value == 2048 && !didWin)
+                                {
+                                    didWin = true;
+                                }
                             }
                             anyMove = true;
                         }
@@ -231,7 +276,7 @@ namespace LogicGames.Games.Game2048
             Render(e, deltaTime);
 
             lastFrameTime = currentFrameTime;
-            Invalidate();
+            if(!isMenuShowing) Invalidate();
         }
 
         protected void Render(PaintEventArgs e, float dt)
@@ -261,19 +306,22 @@ namespace LogicGames.Games.Game2048
             }
         }
 
-        public void NewTile()
+        public void NewTile(int n)
         {
             Random r = new Random();
             int x;
             int y;
-            do
+            for (int i = 0; i < n; i++)
             {
-                x = r.Next(0, 4);
-                y = r.Next(0, 4);
+                do
+                {
+                    x = r.Next(0, 4);
+                    y = r.Next(0, 4);
+                }
+                while (positions[x, y] != null);
+                positions[x, y] = new Tile(cellSize, r.Next(0, 10) < 9 ? 2 : 4, new int[] { x, y });
+                currentTiles++;
             }
-            while (positions[x, y] != null);
-            positions[x, y] = new Tile(cellSize, 9 > r.Next(0, 10) ? 2 : 4, new int[] { x, y });
-            currentTiles++;
         }
     }
 }
