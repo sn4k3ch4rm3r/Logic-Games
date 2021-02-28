@@ -35,7 +35,7 @@ namespace LogicGames.Menus
             }
             this.TopLevel = false;
             this.FormBorderStyle = FormBorderStyle.None;
-            this.ContentSize = new Size((2*border) + ContentSize.Width, (2*border) + buttonTexts.Length * buttonSize.Height);
+            this.ContentSize = new Size((2 * border) + ContentSize.Width, (2 * border) + (buttonTexts.Length * buttonSize.Height));
         }
         private void OnButtonClick(object sender, EventArgs e)
         {

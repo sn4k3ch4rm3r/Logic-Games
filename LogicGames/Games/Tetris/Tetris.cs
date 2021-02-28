@@ -27,6 +27,8 @@ namespace LogicGames.Games.Tetris
 
         private bool gameOver = false;
 
+        private System.Media.SoundPlayer player;
+
         public Tetris() : base()
         {
             this.Text = "Tetris";
@@ -37,6 +39,10 @@ namespace LogicGames.Games.Tetris
             board = new Board(10, 20, base.container);
             nextShape = new Tetrimino(board, Shapes.Random());
             NextShape();
+
+            System.IO.Stream stream = Properties.Resources.Tetris_99_Main_Theme;
+            player = new System.Media.SoundPlayer(stream);
+            player.PlayLooping();
 
             timer.Start();
         }
@@ -143,6 +149,12 @@ namespace LogicGames.Games.Tetris
             if(!gameOver) { 
                 Invalidate();
             }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            player.Stop();
+            base.OnClosed(e);
         }
     }
 }
