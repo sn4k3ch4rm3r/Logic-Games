@@ -22,14 +22,20 @@ namespace LogicGames.Menus
         
         private void gameClosed(object sender, FormClosedEventArgs e)
         {
-            this.Show();
+            
         }
 
         private void showGame(Form gameForm)
         {
+            this.Controls.Clear();
+            gameForm.TopLevel = false;
+            gameForm.FormBorderStyle = FormBorderStyle.None;
+            this.Controls.Add(gameForm);
+            gameForm.Dock = DockStyle.Fill;
+            gameForm.BringToFront();
             gameForm.Show();
+            this.Controls[0].Focus();
             gameForm.FormClosed += gameClosed;
-            this.Hide();
         }
 
         private void game2048_Click(object sender, EventArgs e)

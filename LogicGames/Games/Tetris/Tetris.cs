@@ -32,7 +32,7 @@ namespace LogicGames.Games.Tetris
             this.Text = "Tetris";
 
             DoubleBuffered = true;
-            this.KeyDown += OnKeyDown;
+            this.PreviewKeyDown += new PreviewKeyDownEventHandler(OnKeyDown);
 
             board = new Board(10, 20, base.container);
             nextShape = new Tetrimino(board, Shapes.Random());
@@ -68,7 +68,7 @@ namespace LogicGames.Games.Tetris
             }
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if(e.KeyCode == Keys.Down)
             {
