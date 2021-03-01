@@ -20,6 +20,11 @@ namespace LogicGames.Database.Models
             this.Score = 0;
             this.Tiles = new Dictionary<int, int>();
             this.Time = 0;
+            Tiles[-1] = 0;
+            for (int i = 1; i <= 11; i++)
+            {
+                Tiles[(int)Math.Pow(2, i)] = 0;
+            }
         }
        
         public Game2048Model(int score, Dictionary<int,int> tiles, int time)

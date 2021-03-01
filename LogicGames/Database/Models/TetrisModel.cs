@@ -20,7 +20,16 @@ namespace LogicGames.Database.Models
             this.Score = 0;
             this.Cleared = 0;
             this.Time = 0;
-            this.Shapes = new Dictionary<char, int>();
+            this.Shapes = new Dictionary<char, int> 
+            {
+                { 'o', 0 },
+                { 'i', 0 },
+                { 'l', 0 },
+                { 'j', 0 },
+                { 't', 0 },
+                { 's', 0 },
+                { 'z', 0 },
+            };
         }
 
         public TetrisModel(int score, int cleared, int time, Dictionary<char, int> shapes)
