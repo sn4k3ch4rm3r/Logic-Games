@@ -34,10 +34,10 @@ namespace LogicGames.Games.Minesweeper
         }
 
         private bool generate = true;
-        private Size fieldSize = new Size(15, 15);
+        private Size fieldSize = new Size(10, 10);
         private Size labelSize = new Size(120, 45);
-        private int mineCount = 33;
-        private int leftOverMines = 33;
+        private int mineCount = 20;
+        private int leftOverMines = 20;
 
         private int cellSize;
 
@@ -210,6 +210,12 @@ namespace LogicGames.Games.Minesweeper
                         {
                             if (isValid(i, j))
                             {
+                                if (btnArray[i, j].Text == "🏴")
+                                {
+                                    btnArray[i, j].Text = "";
+                                    mineCount++;
+                                    mineCount_l.Text = $"🏴: {mineCount}";
+                                }
                                 FindMines(i, j);
                             }
                         }
@@ -244,6 +250,8 @@ namespace LogicGames.Games.Minesweeper
             {
                 if (clickedButton.Text == "🏴")
                 {
+                    mineCount++;
+                    mineCount_l.Text = $"🏴: {mineCount}";
                     clickedButton.Text = "";
                 }
                 else
