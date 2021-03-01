@@ -82,6 +82,14 @@
     <Compile Include="Database\DatabaseConfig.cs" />
     <Compile Include="Database\DatabaseConfigManager.cs" />
     <Compile Include="Database\DatabaseHandler.cs" />
+    <Compile Include="Database\GameClients\Game2048Client.cs" />
+    <Compile Include="Database\GameClients\MinesweeperClient.cs" />
+    <Compile Include="Database\GameClients\GameClient.cs" />
+    <Compile Include="Database\GameClients\TetrisClient.cs" />
+    <Compile Include="Database\Models\Game2048Model.cs" />
+    <Compile Include="Database\Models\IModel.cs" />
+    <Compile Include="Database\Models\MinesweeperModel.cs" />
+    <Compile Include="Database\Models\TetrisModel.cs" />
     <Compile Include="Games\Game2048\Game2048.cs">
       <SubType>Form</SubType>
     </Compile>
