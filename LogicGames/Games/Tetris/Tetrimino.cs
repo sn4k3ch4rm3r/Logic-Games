@@ -20,7 +20,7 @@ namespace LogicGames.Games.Tetris
         public Point RenderLocation { get; set; }
 
         private int blockSize;
-        private Shapes.Shape shape;
+        public Shapes.Shape Shape { get; }
 
         private bool isCurrent = false;
 
@@ -30,7 +30,7 @@ namespace LogicGames.Games.Tetris
             Moved = false;
 
             stateIndex = 0;
-            this.shape = shape;
+            this.Shape = shape;
             this.blockSize = board.BlockSize;
 
             RenderLocation = new Point(
@@ -124,7 +124,7 @@ namespace LogicGames.Games.Tetris
                     for (int i = 0; i < 4; i++)
                     {
                         if (states[stateIndex][i,j])
-                            shapeOnBoard[Location.X + i, Location.Y + j] = new Block(board.BlockSize, shape.Color, shape.SideColor, shape.TopColor, shape.BottomColor);
+                            shapeOnBoard[Location.X + i, Location.Y + j] = new Block(board.BlockSize, Shape.Color, Shape.SideColor, Shape.TopColor, Shape.BottomColor);
                     }
                 }
                 return shapeOnBoard;
@@ -139,7 +139,7 @@ namespace LogicGames.Games.Tetris
                 {
                     if (states[stateIndex][i, j] && Location.Y+j >= 0)
                     {
-                        Block b = new Block(blockSize, shape.Color, shape.SideColor, shape.TopColor, shape.BottomColor);
+                        Block b = new Block(blockSize, Shape.Color, Shape.SideColor, Shape.TopColor, Shape.BottomColor);
                         if(isCurrent)
                             b.Location = new Point((this.Location.X + i) * blockSize, (this.Location.Y + j) * blockSize);
                         else

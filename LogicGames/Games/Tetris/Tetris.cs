@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using LogicGames.Database.Models;
 
 namespace LogicGames.Games.Tetris
 {
     public partial class Tetris : GameView
     {
-        private Stopwatch timer = new Stopwatch();
-        private TimeSpan lastMoveTime = new TimeSpan(0);
+        private Stopwatch timer;
+        private TimeSpan lastMoveTime;
         private float tickTime = 0.5f;
 
         private Board board;
@@ -22,10 +23,9 @@ namespace LogicGames.Games.Tetris
         private Tetrimino currentShape;
         private Tetrimino nextShape;
 
-        private int score = 0;
-        private int lines = 0;
+        private TetrisModel model;
 
-        private bool gameOver = false;
+        private bool gameOver;
 
         private System.Media.SoundPlayer player;
 
@@ -36,21 +36,18 @@ namespace LogicGames.Games.Tetris
             DoubleBuffered = true;
             this.PreviewKeyDown += new PreviewKeyDownEventHandler(OnKeyDown);
 
-            board = new Board(10, 20, base.container);
-            nextShape = new Tetrimino(board, Shapes.Random());
-            NextShape();
+            StartGame();
 
             System.IO.Stream stream = Properties.Resources.Tetris_99_Main_Theme;
             player = new System.Media.SoundPlayer(stream);
             player.PlayLooping();
-
-            timer.Start();
         }
 
         private void NextShape()
         {
             currentShape = nextShape;
             currentShape.MakeCurrent();
+            model.Shapes[currentShape.Shape.Name]++;
             nextShape = new Tetrimino(board, Shapes.Random());
         }
 
@@ -64,8 +61,8 @@ namespace LogicGames.Games.Tetris
                 int linesCleared = board.Clear();
                 if (linesCleared > 0)
                 {
-                    score += (int)Math.Pow(2, linesCleared - 1) * 100;
-                    lines += linesCleared;
+                    model.Score += (int)Math.Pow(2, linesCleared - 1) * 100;
+                    model.Cleared += linesCleared;
                 }
 
                 if (!currentShape.Moved || currentShape.Location.Y < 0)
@@ -79,7 +76,7 @@ namespace LogicGames.Games.Tetris
             if(e.KeyCode == Keys.Down)
             {
                 MoveDown();
-                score += 2;
+                model.Score += 2;
             }
             else if(e.KeyCode == Keys.Left)
             {
@@ -98,8 +95,25 @@ namespace LogicGames.Games.Tetris
         private void GameOver()
         {
             gameOver = true;
+            model.Time = (int)timer.Elapsed.TotalSeconds;
+            model.Save();
             Menus.GameMenu gameOverMenu = new Menus.GameMenu("Új játék", "Kilépés");
             base.ShowMenu(gameOverMenu);
+        }
+
+        private void StartGame()
+        {
+            timer = new Stopwatch();
+            lastMoveTime = new TimeSpan(0);
+            
+            board = new Board(10, 20, base.container);
+            model = new TetrisModel();
+            
+            nextShape = new Tetrimino(board, Shapes.Random());
+            NextShape();
+            gameOver = false;
+
+            timer.Start();
         }
 
         protected override void MenuSelected(int selected)
@@ -107,12 +121,7 @@ namespace LogicGames.Games.Tetris
             switch(selected)
             {
                 case 0:
-                    board = new Board(10, 20, base.container);
-                    nextShape = new Tetrimino(board, Shapes.Random());
-                    NextShape();
-                    score = 0;
-                    lines = 0;
-                    gameOver = false;
+                    StartGame();
                     break;
                 default:
                     this.Close();
@@ -131,7 +140,7 @@ namespace LogicGames.Games.Tetris
             if (timePassed.TotalSeconds >= tickTime)
             {
                 MoveDown();
-                score++;
+                model.Score++;
                 lastMoveTime = timer.Elapsed;
             }
 
@@ -145,7 +154,7 @@ namespace LogicGames.Games.Tetris
             int beginText = board.NextDisplayRect.Left - 3;
 
             g.DrawString("Következő:", font, textBrush, beginText, board.NextDisplayRect.Top - stringSize.Height);
-            g.DrawString($"Pontszám: {score}\nSorok: {lines}", font, textBrush, beginText, 30);
+            g.DrawString($"Pontszám: {model.Score}\nSorok: {model.Cleared}", font, textBrush, beginText, 30);
             if(!gameOver) { 
                 Invalidate();
             }

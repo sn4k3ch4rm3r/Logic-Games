@@ -17,8 +17,9 @@ namespace LogicGames.Games.Tetris
             public Color TopColor { get; }
             public Color BottomColor { get; }
             public Size Size { get; }
+            public char Name { get; }
 
-            public Shape(Color color, Color sideColor, Color topColor, Color bottomColor, int[,] shape, int width, int height)
+            public Shape(Color color, Color sideColor, Color topColor, Color bottomColor, int[,] shape, int width, int height, char name)
             {
                 this.Blocks = new List<bool[,]>();
                 this.Color = color;
@@ -26,6 +27,8 @@ namespace LogicGames.Games.Tetris
                 SideColor = sideColor;
                 TopColor = topColor;
                 BottomColor = bottomColor;
+
+                Name = name;
 
                 for (int i = 0; i < shape.Length / 4; i++)
                 {
@@ -59,7 +62,7 @@ namespace LogicGames.Games.Tetris
                     0b0110,
                     0b0000,
                 },
-            }, 4, 4);
+            }, 4, 4, 'o');
 
         public static Shape I = new Shape(
             Color.FromArgb(1, 240, 241),
@@ -92,7 +95,7 @@ namespace LogicGames.Games.Tetris
                     0b0100,
                     0b0100,
                 },
-            }, 4, 3);
+            }, 4, 3, 'i');
 
         public static Shape J = new Shape(
             Color.FromArgb(239, 160, 0),
@@ -125,7 +128,7 @@ namespace LogicGames.Games.Tetris
                     0b0100,
                     0b0000,
                 },
-            }, 3, 4);
+            }, 3, 4, 'j');
 
         public static Shape L = new Shape(
             Color.FromArgb(1, 1, 240),
@@ -158,7 +161,7 @@ namespace LogicGames.Games.Tetris
                     0b0110,
                     0b0000,
                 },
-            }, 3, 4);
+            }, 3, 4, 'l');
 
         public static Shape T = new Shape(
             Color.FromArgb(160, 0, 241),
@@ -191,7 +194,7 @@ namespace LogicGames.Games.Tetris
                     0b0100,
                     0b0000,
                 },
-            }, 3, 4);
+            }, 3, 4, 't');
 
         public static Shape Z = new Shape(
             Color.FromArgb(240, 1, 0),
@@ -224,7 +227,7 @@ namespace LogicGames.Games.Tetris
                     0b1000,
                     0b0000,
                 },
-            }, 3, 2);
+            }, 3, 2, 'z');
 
         public static Shape S = new Shape(
             Color.FromArgb(0, 240, 0),
@@ -257,7 +260,7 @@ namespace LogicGames.Games.Tetris
                     0b0100,
                     0b0000,
                 }
-            }, 3, 2);
+            }, 3, 2, 's');
 
         private static Shape[] shapes = { I, O, T, L, J, S, Z };
         public static Shape Random()
