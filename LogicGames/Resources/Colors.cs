@@ -11,6 +11,6 @@ namespace LogicGames.Resources
    {
         public static Color Background = Color.FromArgb(0, 43, 54);
         public static Color ContainterBackground = Color.FromArgb(7, 54, 66);
-        public static Color PrimaryText = Color.FromArgb(253, 246, 227);
+        public static Color PrimaryText = Color.FromArgb(147, 161, 161);
    }
 }

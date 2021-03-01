@@ -20,22 +20,24 @@ namespace LogicGames.Menus
         public GameMenu(params string[] buttonTexts)
         {
             InitializeComponent();
+            this.BackColor = Resources.Colors.Background;
             ContentSize = new Size(150,50);
             int y = 0;
             foreach(string text in buttonTexts)
             {
-                Button button = new Button();
+                Button button = new Resources.CustomButton();
                 button.Text = text;
+                button.Font = new Font("Arial", 12, FontStyle.Bold);
                 button.Location = new Point(border,border + y);
                 button.Size = ContentSize;
                 button.Click += OnButtonClick;
-                y += ContentSize.Height;
+                y += ContentSize.Height + border;
                 buttons.Add(button);
                 this.Controls.Add(button);
             }
             this.TopLevel = false;
             this.FormBorderStyle = FormBorderStyle.None;
-            this.ContentSize = new Size((2 * border) + ContentSize.Width, (2 * border) + (buttonTexts.Length * buttonSize.Height));
+            this.ContentSize = new Size((2 * border) + ContentSize.Width, ((2 + buttons.Count - 1) * border) + (buttonTexts.Length * buttonSize.Height));
         }
         private void OnButtonClick(object sender, EventArgs e)
         {
