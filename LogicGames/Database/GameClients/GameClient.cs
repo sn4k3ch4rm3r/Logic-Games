@@ -6,39 +6,33 @@ using System.Threading.Tasks;
 
 namespace LogicGames.Database.GameClients
 {
-    abstract class GameClient
+    class GameClient
     {
-        protected DatabaseHandler dbHandler = new DatabaseHandler();
-        protected abstract string Table { get; }
-        public abstract int Highscore { get; }
-        public int Playtime 
+        protected static DatabaseHandler dbHandler = new DatabaseHandler();
+        public static int Highscore { get; }
+
+        protected static int getPlaytime(string table)
         {
-            get
+            dbHandler.Open();
+            List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT SUM(time) as playtime FROM {table};");
+            dbHandler.Close();
+            if (result.Count > 0)
             {
-                dbHandler.Open();
-                List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT SUM(time) as playtime FROM {Table};");
-                dbHandler.Close();
-                if (result.Count > 0)
-                {
-                    return Convert.ToInt32(result[0]["playtime"]);
-                }
-                else return 0;
+                return Convert.ToInt32(result[0]["playtime"]);
             }
+            else return 0;
         }
 
-        public int GamesPlayed
+        protected static int getGamesPlayed(string table)
         {
-            get
+            dbHandler.Open();
+            List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT COUNT(*) as gamecount FROM {table};");
+            dbHandler.Close();
+            if (result.Count > 0)
             {
-                dbHandler.Open();
-                List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT COUNT(*) as gamecount FROM {Table};");
-                dbHandler.Close();
-                if (result.Count > 0)
-                {
-                    return Convert.ToInt32(result[0]["gamecount"]);
-                }
-                else return 0;
+                return Convert.ToInt32(result[0]["gamecount"]);
             }
+            else return 0;
         }
     }
 }

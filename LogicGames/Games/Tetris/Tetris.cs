@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using LogicGames.Database.Models;
+using LogicGames.Database.GameClients;
 
 namespace LogicGames.Games.Tetris
 {
@@ -154,7 +155,7 @@ namespace LogicGames.Games.Tetris
             int beginText = board.NextDisplayRect.Left - 3;
 
             g.DrawString("Következő:", font, textBrush, beginText, board.NextDisplayRect.Top - stringSize.Height);
-            g.DrawString($"Pontszám: {model.Score}\nSorok: {model.Cleared}", font, textBrush, beginText, 30);
+            g.DrawString($"Pontszám: {model.Score}\nRekord: {TetrisClient.Highscore}\nSorok: {model.Cleared}", font, textBrush, beginText, 30);
             if(!gameOver) { 
                 Invalidate();
             }
