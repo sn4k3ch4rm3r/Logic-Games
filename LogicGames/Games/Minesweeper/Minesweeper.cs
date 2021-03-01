@@ -34,10 +34,10 @@ namespace LogicGames.Games.Minesweeper
         }
 
         private bool generate = true;
-        private Size fieldSize = new Size(15, 15);
+        private Size fieldSize = new Size(10, 10);
         private Size labelSize = new Size(120, 45);
-        private int mineCount = 33;
-        private int leftOverMines = 33;
+        private int mineCount = 10;
+        private int leftOverMines = 10;
 
         private int cellSize;
 
@@ -72,7 +72,7 @@ namespace LogicGames.Games.Minesweeper
             {
                 for (int j = 0; j < fieldSize.Height; j++)
                 {
-                    Button newButton = new Button();
+                    Button newButton = new MinefieldButton();
                     newButton.Font = new Font("Arial", 18, FontStyle.Bold);
                     newButton.MouseDown += new MouseEventHandler(MyButton_Click);
                     newButton.Enabled = true;

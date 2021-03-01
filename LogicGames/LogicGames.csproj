@@ -82,6 +82,12 @@
     <Compile Include="Games\GameView.Designer.cs">
       <DependentUpon>GameView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Games\Minesweeper\MinefieldButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Games\Minesweeper\MinefieldButton.Designer.cs">
+      <DependentUpon>MinefieldButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="Games\Minesweeper\Minesweeper.cs">
       <SubType>Form</SubType>
     </Compile>
