@@ -165,8 +165,8 @@ namespace LogicGames.Games.Minesweeper
             generate = true;
             timerCounter = 0;
             tmr.Text = "⏰: 0";
-            mineCount = 33;
-            leftOverMines = 33;
+            mineCount = 10;
+            leftOverMines = 10;
             mineCount_l.Text = $"🏴: {mineCount}";
         }
 
@@ -210,6 +210,12 @@ namespace LogicGames.Games.Minesweeper
                         {
                             if (isValid(i, j))
                             {
+                                if (btnArray[i, j].Text == "🏴")
+                                {
+                                    btnArray[i, j].Text = "";
+                                    mineCount++;
+                                    mineCount_l.Text = $"🏴: {mineCount}";
+                                }
                                 FindMines(i, j);
                             }
                         }
@@ -244,6 +250,8 @@ namespace LogicGames.Games.Minesweeper
             {
                 if (clickedButton.Text == "🏴")
                 {
+                    mineCount++;
+                    mineCount_l.Text = $"🏴: {mineCount}";
                     clickedButton.Text = "";
                 }
                 else
