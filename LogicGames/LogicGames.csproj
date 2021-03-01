@@ -117,6 +117,12 @@
     <Compile Include="Games\Tetris\Tetris.Designer.cs">
       <DependentUpon>Tetris.cs</DependentUpon>
     </Compile>
+    <Compile Include="Menus\DatabaseSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menus\DatabaseSettingsForm.Designer.cs">
+      <DependentUpon>DatabaseSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menus\GameMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Colors.cs" />
+    <Compile Include="Resources\CustomButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Resources\CustomButton.Designer.cs">
+      <DependentUpon>CustomButton.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Games\Game2048\Game2048.resx">
       <DependentUpon>Game2048.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,6 +155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Games\Tetris\Tetris.resx">
       <DependentUpon>Tetris.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menus\DatabaseSettingsForm.resx">
+      <DependentUpon>DatabaseSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menus\GameMenu.resx">
       <DependentUpon>GameMenu.cs</DependentUpon>

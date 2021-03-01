@@ -16,7 +16,7 @@ namespace LogicGames.Menus
     public partial class MainMenu : Form
     {
         private Panel panel;
-        private Size buttonSize = new Size(150, 50);
+        private Size buttonSize = new Size(170, 60);
         private int padding = 10;
         public MainMenu()
         {
@@ -34,13 +34,14 @@ namespace LogicGames.Menus
             CreateButton(panel, "2048", game2048_Click);
             CreateButton(panel, "Tetris", gameTetris_Click);
             CreateButton(panel, "Aknakereső", gameMinesweeper_Click);
+            CreateButton(panel, "Adatbázis Beállítások", databaseSettings_Click);
             CenterButtonPanel();
             this.Controls.Add(panel);
         }
 
         private void CreateButton(Panel panel, string text, EventHandler onClick)
         {
-            Button button = new Button();
+            Resources.CustomButton button = new Resources.CustomButton();
             button.Text = text;
             button.Font = new Font("Arial", 12, FontStyle.Bold);
             button.BackColor = Resources.Colors.ContainterBackground;
@@ -94,6 +95,12 @@ namespace LogicGames.Menus
         private void gameMinesweeper_Click(object sender, EventArgs e)
         {
             showGame(new Minesweeper());
+        }
+
+        private void databaseSettings_Click(object sender, EventArgs e)
+        {
+            Form dbSettings = new DatabaseSettingsForm();
+            dbSettings.ShowDialog();
         }
 
         private void OnResize(object sender, EventArgs e)

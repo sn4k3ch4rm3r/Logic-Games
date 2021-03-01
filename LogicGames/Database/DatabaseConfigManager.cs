@@ -27,6 +27,21 @@ namespace LogicGames.Database
         }
 
         /// <summary>
+        /// Save the config generated from the given parameters.
+        /// </summary>
+        public static DatabaseConfig Save(string username, string password, string database, string address)
+        {
+            DatabaseConfig config = new DatabaseConfig();
+            config.Username = username;
+            config.Password = password;
+            config.Database = database;
+            config.Address = address;
+            string json = JsonSerializer.Serialize(config);
+            File.WriteAllText("config.json", json);
+            return config;
+        }
+
+        /// <summary>
         /// Load database configuration from config.json
         /// </summary>
         public static DatabaseConfig Load()
