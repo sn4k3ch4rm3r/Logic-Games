@@ -284,6 +284,7 @@ namespace LogicGames.Games.Minesweeper
                 FindMines(column, row);
                 if (didWin())
                 {
+                    timer.Enabled = false;
                     MessageBox.Show("Nyertél!");
                     Ending();
                 }
