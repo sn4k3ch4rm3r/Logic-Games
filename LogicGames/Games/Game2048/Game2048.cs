@@ -2,27 +2,32 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using LogicGames.Database.Models;
+using LogicGames.Database.GameClients;
 
 namespace LogicGames.Games.Game2048
 {
     public partial class Game2048 : GameView
     {
         private Tile tile;
-        private int score = 0;
+        private Game2048Model model;
         private int currentTiles;
         private int cellSize;
         private bool anyMove;
         private bool didWin = false;
         private bool seenMenu = false;
         private bool isMenuShowing = false;
+        private Stopwatch stopwatch = new Stopwatch();
         Tile[,] positions = new Tile[4, 4];
         public Game2048() : base()
         {
+            model = new Game2048Model();
             this.Text = "2048";
             this.PreviewKeyDown += new PreviewKeyDownEventHandler(Game2048_KeyDown);
             DoubleBuffered = true;
             cellSize = base.container.Width / 4;
             NewTile(2);
+            stopwatch.Start();
         }
 
         private void Game2048_KeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -64,17 +69,22 @@ namespace LogicGames.Games.Game2048
         {
             if (((!didWin || seenMenu) && selected == 0) || (!seenMenu && didWin && selected == 1))
             {
+                model.Time = (int)stopwatch.Elapsed.TotalSeconds;
+                model.Save();
                 positions = new Tile[4, 4];
-                score = 0;
+                model = new Game2048Model();
                 currentTiles = 0;
                 seenMenu = false;
                 didWin = false;
                 isMenuShowing = false;
+                stopwatch.Restart();
                 NewTile(2);
                 return;
             }
             else if (((!didWin || seenMenu) && selected == 1) || (didWin && selected == 2))
             {
+                model.Time = (int)stopwatch.Elapsed.TotalSeconds;
+                model.Save();
                 this.Close();
             }
             seenMenu = true;
@@ -108,7 +118,8 @@ namespace LogicGames.Games.Game2048
                             if (didMerge)
                             {
                                 positions[i - x, j].value *= 2;
-                                score += positions[i - x, j].value;
+                                model.Tiles[positions[i - x, j].value > 2048 ? -1 : positions[i - x, j].value]++;
+                                model.Score += positions[i - x, j].value;
                                 currentTiles--;
                                 if (positions[i - x, j].value == 2048 && !didWin)
                                 {
@@ -147,7 +158,8 @@ namespace LogicGames.Games.Game2048
                             if (didMerge)
                             {
                                 positions[i + x, j].value *= 2;
-                                score += positions[i + x, j].value;
+                                model.Tiles[positions[i + x, j].value > 2048 ? -1 : positions[i + x, j].value]++;
+                                model.Score += positions[i + x, j].value;
                                 currentTiles--;
                                 if (positions[i + x, j].value == 2048 && !didWin)
                                 {
@@ -187,7 +199,8 @@ namespace LogicGames.Games.Game2048
                             if (didMerge)
                             {
                                 positions[i, j - x].value *= 2;
-                                score += positions[i, j - x].value;
+                                model.Tiles[positions[i, j - x].value > 2048 ? -1 : positions[i, j - x].value]++;
+                                model.Score += positions[i, j - x].value;
                                 currentTiles--;
                                 if (positions[i, j - x].value == 2048 && !didWin)
                                 {
@@ -227,7 +240,8 @@ namespace LogicGames.Games.Game2048
                             if (didMerge)
                             {
                                 positions[i, j + x].value *= 2;
-                                score += positions[i, j + x].value;
+                                model.Tiles[positions[i, j + x].value > 2048 ? -1 : positions[i, j + x].value]++;
+                                model.Score += positions[i, j + x].value;
                                 currentTiles--;
                                 if (positions[i, j + x].value == 2048 && !didWin)
                                 {
@@ -291,7 +305,7 @@ namespace LogicGames.Games.Game2048
                 g.DrawLine(p, 0, i * cellSize, 4 * cellSize, i * cellSize);
             }
             FontFamily font = new FontFamily("Arial");
-            g.DrawString($"Pont: {score}", new Font(font, 16, FontStyle.Bold), new SolidBrush(Resources.Colors.PrimaryText), 10, -60);
+            g.DrawString($"Pont: {model.Score}", new Font(font, 16, FontStyle.Bold), new SolidBrush(Resources.Colors.PrimaryText), 10, -60);
 
             if (positions.Length > 0)
             {
