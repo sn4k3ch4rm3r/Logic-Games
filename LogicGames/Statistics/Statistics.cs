@@ -60,6 +60,7 @@ namespace LogicGames.Statistics
             //2048
             texts.Add(new String("2048", titleFont, Resources.Colors.PrimaryText, 0, 10));
             texts.Add(new String($"Rekord: {Database.GameClients.Game2048Client.Highscore}", font, Resources.Colors.PrimaryText, 0, 5));
+            texts.Add(new String($"Megnyert játékok: {Database.GameClients.Game2048Client.GamesWon}", font, Resources.Colors.PrimaryText, 0, 0));
             texts.Add(new String($"Játékidő: {Database.GameClients.Game2048Client.Playtime / 60} perc", font, Resources.Colors.PrimaryText, 0, 0));
             texts.Add(new String($"Játszott játékok: {Database.GameClients.Game2048Client.GamesPlayed}", font, Resources.Colors.PrimaryText, 0, 0));
             //Tetris
@@ -71,6 +72,9 @@ namespace LogicGames.Statistics
             //Minesweeper
             texts.Add(new String("Aknakereső", titleFont, Resources.Colors.PrimaryText, 0, 30));
             texts.Add(new String($"Legjobb idő: {Database.GameClients.MinesweeperClient.Highscore}", font, Resources.Colors.PrimaryText, 0, 5));
+            texts.Add(new String($"Megnyert játékok: {Database.GameClients.MinesweeperClient.GamesWon}", font, Resources.Colors.PrimaryText, 0, 0));
+            texts.Add(new String($"Felfedezett mezők: {Database.GameClients.MinesweeperClient.SquaresDiscovered}", font, Resources.Colors.PrimaryText, 0, 0));
+            texts.Add(new String($"Lerakott zászlók: {Database.GameClients.MinesweeperClient.FlagsPlaced}", font, Resources.Colors.PrimaryText, 0, 0));
             texts.Add(new String($"Játékidő: {Database.GameClients.MinesweeperClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText, 0, 0));
             texts.Add(new String($"Játszott játékok: {Database.GameClients.MinesweeperClient.GamesPlayed}", font, Resources.Colors.PrimaryText, 0, 0));
         }
@@ -82,7 +86,6 @@ namespace LogicGames.Statistics
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            //base.OnPaint(e);
             e.Graphics.FillRectangle(new SolidBrush(Resources.Colors.ContainterBackground), 0, 0, this.ClientRectangle.Width, headerHeight);
             e.Graphics.TranslateTransform(base.container.Left, base.container.Top);
 

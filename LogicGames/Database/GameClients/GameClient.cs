@@ -8,7 +8,7 @@ namespace LogicGames.Database.GameClients
 {
     class GameClient
     {
-        protected static DatabaseHandler dbHandler = new DatabaseHandler();
+        public static DatabaseHandler dbHandler = new DatabaseHandler();
         public static int Highscore { get; }
 
         protected static int getPlaytime(string table)

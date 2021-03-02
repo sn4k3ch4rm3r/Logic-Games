@@ -25,6 +25,19 @@ namespace LogicGames.Database.GameClients
             }
         }
 
+        public static int GamesWon
+        {
+            get
+            {
+                dbHandler.Open();
+                List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT COUNT(id) as won FROM {table} WHERE tile2048 > 0");
+                dbHandler.Close();
+                int won;
+                int.TryParse(result[0]["won"].ToString(), out won);
+                return won;
+            }
+        }
+
         public static int Playtime
         {
             get { return getPlaytime(table); }
