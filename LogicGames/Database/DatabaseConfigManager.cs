@@ -38,6 +38,7 @@ namespace LogicGames.Database
             config.Address = address;
             string json = JsonSerializer.Serialize(config);
             File.WriteAllText("config.json", json);
+            GameClients.GameClient.dbHandler = new DatabaseHandler();
             return config;
         }
 
