@@ -8,11 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using LogicGames.Database.Models;
+using LogicGames.Database.GameClients;
 
 namespace LogicGames.Games.Minesweeper
 {
     public partial class Minesweeper : GameView
     {
+        private MinesweeperModel model;
+
         Button[,] btnArray;
         Label mineCount_l = new Label();
         Label tmr = new Label();
@@ -23,6 +27,7 @@ namespace LogicGames.Games.Minesweeper
         private Color[] colors = {Color.Blue, Color.Green, Color.Red, Color.Purple, Color.Maroon, Color.Turquoise, Color.Black, Color.Gray};
         public Minesweeper() : base()
         {
+            model = new MinesweeperModel();
             this.Text = "Aknakereső";
             this.Resize += OnResize;
             btnArray = new Button[fieldSize.Width, fieldSize.Height];
@@ -36,6 +41,7 @@ namespace LogicGames.Games.Minesweeper
         private bool generate = true;
         private Size fieldSize = new Size(10, 10);
         private Size labelSize = new Size(120, 45);
+        private int originalMineCount = 10;
         private int mineCount = 10;
         private int leftOverMines = 10;
 
@@ -115,7 +121,7 @@ namespace LogicGames.Games.Minesweeper
                 {
                     field[column_add, row_add] = 1;
                     already_mine.Add(coords);
-                    btnArray[column_add, row_add].Text = "A";
+                    //btnArray[column_add, row_add].Text = "A";
                     i++;
                 }
             }
@@ -131,6 +137,9 @@ namespace LogicGames.Games.Minesweeper
 
         private void Ending()
         {
+            model.Time = timerCounter;
+            model.Flags = originalMineCount - mineCount;
+            model.Save();
             base.ShowMenu(new Menus.GameMenu("Új játék", "Kilépés"));
         }
 
@@ -151,6 +160,7 @@ namespace LogicGames.Games.Minesweeper
 
         public void Reset()
         {
+            model = new MinesweeperModel();
             field = new int[fieldSize.Width, fieldSize.Height];
             for (int i = 0; i < fieldSize.Width; i++)
             {
@@ -199,6 +209,7 @@ namespace LogicGames.Games.Minesweeper
         {
             if (btnArray[column, row].Enabled)
             {
+                model.Checked++;
                 btnArray[column, row].Enabled = false;
                 btnArray[column, row].BackColor = (column + row) % 2 == 1 ? Color.FromArgb(215, 184, 153) : Color.FromArgb(229, 194, 159);
                 int count = check(column, row);
@@ -254,7 +265,7 @@ namespace LogicGames.Games.Minesweeper
                     mineCount_l.Text = $"🏴: {mineCount}";
                     clickedButton.Text = "";
                 }
-                else
+                else if (mineCount > 0)
                 {
                     mineCount--;
                     mineCount_l.Text = $"🏴: {mineCount}";
@@ -276,6 +287,7 @@ namespace LogicGames.Games.Minesweeper
                 if (field[column, row] == 1)
                 {
                     timer.Enabled = false;
+                    model.Mine = true;
                     checkLeftMines();
                     MessageBox.Show($"Vesztettél!\nJátékban töltött idő: {timerCounter}s\nHátralévő bombák: {leftOverMines}");
                     Ending();
@@ -285,6 +297,7 @@ namespace LogicGames.Games.Minesweeper
                 if (didWin())
                 {
                     timer.Enabled = false;
+                    model.Mine = false;
                     MessageBox.Show("Nyertél!");
                     Ending();
                 }
