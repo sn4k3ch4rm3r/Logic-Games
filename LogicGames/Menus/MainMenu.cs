@@ -34,6 +34,7 @@ namespace LogicGames.Menus
             CreateButton(panel, "2048", game2048_Click);
             CreateButton(panel, "Tetris", gameTetris_Click);
             CreateButton(panel, "Aknakereső", gameMinesweeper_Click);
+            CreateButton(panel, "Statisztika", statistics_Click);
             CreateButton(panel, "Adatbázis Beállítások", databaseSettings_Click);
             CenterButtonPanel();
             this.Controls.Add(panel);
@@ -69,32 +70,36 @@ namespace LogicGames.Menus
             CreateButtonPanel();
         }
 
-        private void showGame(Form gameForm)
+        private void showForm(Form form)
         {
             this.Controls.Clear();
-            gameForm.TopLevel = false;
-            gameForm.FormBorderStyle = FormBorderStyle.None;
-            this.Controls.Add(gameForm);
-            gameForm.Dock = DockStyle.Fill;
-            gameForm.BringToFront();
-            gameForm.Show();
+            form.TopLevel = false;
+            form.FormBorderStyle = FormBorderStyle.None;
+            this.Controls.Add(form);
+            form.Dock = DockStyle.Fill;
+            form.BringToFront();
+            form.Show();
             this.Controls[0].Focus();
-            gameForm.FormClosed += gameClosed;
+            form.FormClosed += gameClosed;
         }
 
         private void game2048_Click(object sender, EventArgs e)
         {
-            showGame(new Game2048());
+            showForm(new Game2048());
         }
 
         private void gameTetris_Click(object sender, EventArgs e)
         {
-            showGame(new Tetris());
+            showForm(new Tetris());
         }
 
         private void gameMinesweeper_Click(object sender, EventArgs e)
         {
-            showGame(new Minesweeper());
+            showForm(new Minesweeper());
+        }
+        private void statistics_Click(object sender, EventArgs e)
+        {
+            showForm(new Statistics.Statistics());
         }
 
         private void databaseSettings_Click(object sender, EventArgs e)

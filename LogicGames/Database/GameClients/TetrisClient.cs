@@ -25,6 +25,19 @@ namespace LogicGames.Database.GameClients
             }
         }
 
+        public static int LinesCleared 
+        {
+            get
+            {
+                dbHandler.Open();
+                List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT SUM(cleared) as `lines` FROM {table}");
+                dbHandler.Close();
+                int cleared;
+                int.TryParse(result[0]["lines"].ToString(), out cleared);
+                return cleared;
+            }
+        }
+
         public static int Playtime
         {
             get { return getPlaytime(table); }

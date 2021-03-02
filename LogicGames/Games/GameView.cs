@@ -29,7 +29,7 @@ namespace LogicGames.Games
             this.PreviewKeyDown += new PreviewKeyDownEventHandler(OnKeyDown);
         }
 
-        private void onResize(object sender, EventArgs e)
+        protected virtual void onResize(object sender, EventArgs e)
         {
             SetContainerLocation();
             Refresh();

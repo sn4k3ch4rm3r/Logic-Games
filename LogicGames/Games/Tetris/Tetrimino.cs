@@ -18,6 +18,7 @@ namespace LogicGames.Games.Tetris
 
         public Point Location { get; set; }
         public Point RenderLocation { get; set; }
+        public int BorderWidth { get; set; }
 
         private int blockSize;
         public Shapes.Shape Shape { get; }
@@ -39,6 +40,7 @@ namespace LogicGames.Games.Tetris
             );
             this.Location = new Point(0,0);
             this.states = shape.Blocks;
+            this.BorderWidth = 3;
         }
 
         public void MakeCurrent()
@@ -139,7 +141,7 @@ namespace LogicGames.Games.Tetris
                 {
                     if (states[stateIndex][i, j] && Location.Y+j >= 0)
                     {
-                        Block b = new Block(blockSize, Shape.Color, Shape.SideColor, Shape.TopColor, Shape.BottomColor);
+                        Block b = new Block(blockSize, Shape.Color, Shape.SideColor, Shape.TopColor, Shape.BottomColor, BorderWidth);
                         if(isCurrent)
                             b.Location = new Point((this.Location.X + i) * blockSize, (this.Location.Y + j) * blockSize);
                         else

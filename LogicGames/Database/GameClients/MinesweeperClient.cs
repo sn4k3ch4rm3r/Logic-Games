@@ -19,7 +19,7 @@ namespace LogicGames.Database.GameClients
                 dbHandler.Close();
                 if (result.Count > 0)
                 {
-                    return Convert.ToInt32(result[0]["score"]);
+                    return Convert.ToInt32(result[0]["time"]);
                 }
                 else return 0;
             }

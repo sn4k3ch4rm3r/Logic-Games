@@ -16,11 +16,9 @@ namespace LogicGames.Database.GameClients
             dbHandler.Open();
             List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT SUM(time) as playtime FROM {table};");
             dbHandler.Close();
-            if (result.Count > 0)
-            {
-                return Convert.ToInt32(result[0]["playtime"]);
-            }
-            else return 0;
+            int time;
+            int.TryParse(result[0]["playtime"].ToString(), out time);
+            return time;
         }
 
         protected static int getGamesPlayed(string table)
@@ -28,11 +26,9 @@ namespace LogicGames.Database.GameClients
             dbHandler.Open();
             List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT COUNT(*) as gamecount FROM {table};");
             dbHandler.Close();
-            if (result.Count > 0)
-            {
-                return Convert.ToInt32(result[0]["gamecount"]);
-            }
-            else return 0;
+            int games;
+            int.TryParse(result[0]["gamecount"].ToString(), out games);
+            return games;
         }
     }
 }
