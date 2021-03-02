@@ -15,7 +15,7 @@ namespace LogicGames.Database.GameClients
             get
             {
                 dbHandler.Open();
-                List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT time FROM {table} ORDER BY time LIMIT 1");
+                List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT time FROM {table} WHERE mine = 0 ORDER BY time LIMIT 1");
                 dbHandler.Close();
                 if (result.Count > 0)
                 {
