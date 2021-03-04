@@ -9,6 +9,7 @@ namespace LogicGames.Games.Game2048
 {
     public partial class Game2048 : GameView
     {
+        private const float animationTime = .1f;
         private Tile tile;
         private Game2048Model model;
         private int currentTiles;
@@ -17,6 +18,8 @@ namespace LogicGames.Games.Game2048
         private bool didWin = false;
         private bool seenMenu = false;
         private bool isMenuShowing = false;
+        private bool nextTile = false;
+        private float timeSinceMove = 0;
         private Stopwatch stopwatch = new Stopwatch();
         Tile[,] positions = new Tile[4, 4];
         public Game2048() : base()
@@ -33,6 +36,7 @@ namespace LogicGames.Games.Game2048
         private void Game2048_KeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (isMenuShowing) return;
+            if (timeSinceMove < animationTime) NewTile(1);
             anyMove = false;
             switch (e.KeyCode)
             {
@@ -51,7 +55,8 @@ namespace LogicGames.Games.Game2048
             }
             if (anyMove)
             {
-                NewTile(1);
+                nextTile = true;
+                timeSinceMove = 0;
             }
             if (didWin && !seenMenu)
             {
@@ -112,7 +117,7 @@ namespace LogicGames.Games.Game2048
                         }
                         if (x > 0)
                         {
-                            positions[i, j].Coord[0] -= x;
+                            positions[i, j].Move(-x, 0);
                             positions[i - x, j] = positions[i, j];
                             positions[i, j] = null;
                             if (didMerge)
@@ -152,7 +157,7 @@ namespace LogicGames.Games.Game2048
                         }
                         if (x > 0)
                         {
-                            positions[i, j].Coord[0] += x;
+                            positions[i, j].Move(x, 0);
                             positions[i + x, j] = positions[i, j];
                             positions[i, j] = null;
                             if (didMerge)
@@ -193,7 +198,7 @@ namespace LogicGames.Games.Game2048
                         }
                         if (x > 0)
                         {
-                            positions[i, j].Coord[1] -= x;
+                            positions[i, j].Move(0, -x);
                             positions[i, j - x] = positions[i, j];
                             positions[i, j] = null;
                             if (didMerge)
@@ -234,7 +239,7 @@ namespace LogicGames.Games.Game2048
                         }
                         if (x > 0)
                         {
-                            positions[i, j].Coord[1] += x;
+                            positions[i, j].Move(0, x);
                             positions[i, j + x] = positions[i, j];
                             positions[i, j] = null;
                             if (didMerge)
@@ -287,13 +292,16 @@ namespace LogicGames.Games.Game2048
             TimeSpan currentFrameTime = frameTimer.Elapsed;
             float deltaTime = (float)(currentFrameTime - lastFrameTime).TotalSeconds;
 
+            timeSinceMove += deltaTime;
+            if (nextTile && timeSinceMove >= animationTime) NewTile(1);
+
             Render(e, deltaTime);
 
             lastFrameTime = currentFrameTime;
             if(!isMenuShowing) Invalidate();
         }
 
-        protected void Render(PaintEventArgs e, float dt)
+        protected void Render(PaintEventArgs e, float deltaTime)
         {
             Graphics g = e.Graphics;
             g.TranslateTransform(base.container.X, base.container.Y + base.container.Height - base.container.Width);
@@ -314,7 +322,7 @@ namespace LogicGames.Games.Game2048
                     for (int j = 0; j < 4; j++)
                     {
                         tile = positions[i, j];
-                        if (tile != null) tile.Render(g);
+                        if (tile != null) tile.Render(g, deltaTime, animationTime);
                     }
                 }
             }
@@ -322,6 +330,7 @@ namespace LogicGames.Games.Game2048
 
         public void NewTile(int n)
         {
+            nextTile = false;
             Random r = new Random();
             int x;
             int y;
@@ -333,7 +342,7 @@ namespace LogicGames.Games.Game2048
                     y = r.Next(0, 4);
                 }
                 while (positions[x, y] != null);
-                positions[x, y] = new Tile(cellSize, r.Next(0, 10) < 9 ? 2 : 4, new int[] { x, y });
+                positions[x, y] = new Tile(cellSize, r.Next(0, 10) < 9 ? 2 : 4, new Point(x, y));
                 currentTiles++;
             }
         }
