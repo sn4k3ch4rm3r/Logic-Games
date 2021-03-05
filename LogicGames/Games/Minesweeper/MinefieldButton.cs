@@ -22,7 +22,7 @@ namespace LogicGames.Games.Minesweeper
             //base.OnPaint(pevent);
             e.Graphics.FillRectangle(new SolidBrush(this.BackColor), this.ClientRectangle);
             SizeF stringSize = e.Graphics.MeasureString(this.Text, this.Font);
-            if (this.Text == "🏴")
+            if (this.Text == "🏴" || this.Text == "💣")
                 stringSize.Width += 10;
             TextRenderer.DrawText(e.Graphics,this.Text, this.Font, new Point((this.ClientRectangle.Width / 2) - (int)(stringSize.Width / 2), (this.ClientRectangle.Height / 2) - (int)(stringSize.Height / 2)), this.ForeColor, this.BackColor);
         }

@@ -22,14 +22,29 @@ namespace LogicGames.Games.Minesweeper
         Label tmr = new Label();
 
         Timer timer = new Timer();
+        Random rnd;
+
         private int timerCounter;
         private int[,] field;
         private Color[] colors = {Color.Blue, Color.Green, Color.Red, Color.Purple, Color.Maroon, Color.Turquoise, Color.Black, Color.Gray};
+
+        private bool generate = true;
+        private Size fieldSize = new Size(10, 10);
+        private Size labelSize = new Size(120, 45);
+        private int originalMineCount = 15;
+        private int mineCount;
+        private int leftOverMines;
+
+        private int cellSize;
+
         public Minesweeper() : base()
         {
             model = new MinesweeperModel();
             this.Text = "Aknakereső";
             this.Resize += OnResize;
+            rnd = new Random();
+            mineCount = originalMineCount;
+            leftOverMines = originalMineCount;
             btnArray = new Button[fieldSize.Width, fieldSize.Height];
             field = new int[fieldSize.Width, fieldSize.Height]; //1 = mine, 0 = free space
             timer.Interval = 1000;
@@ -37,15 +52,6 @@ namespace LogicGames.Games.Minesweeper
             Label_Create();
             Button_Create();
         }
-
-        private bool generate = true;
-        private Size fieldSize = new Size(10, 10);
-        private Size labelSize = new Size(120, 45);
-        private int originalMineCount = 10;
-        private int mineCount = 10;
-        private int leftOverMines = 10;
-
-        private int cellSize;
 
         private void Label_Create()
         {
@@ -97,7 +103,6 @@ namespace LogicGames.Games.Minesweeper
 
         private void Mines_Generate(int column, int row) //Changes the mines location's value to 1
         {
-            Random rnd = new Random();
             int i = 0;
             List<string> already_mine = new List<string>();
             while (i < mineCount)
@@ -140,6 +145,10 @@ namespace LogicGames.Games.Minesweeper
             model.Time = timerCounter;
             model.Flags = originalMineCount - mineCount;
             model.Save();
+            foreach (Button button in btnArray)
+            {
+                button.Enabled = false;
+            }
             base.ShowMenu(new Menus.GameMenu("Új játék", "Kilépés"));
         }
 
@@ -175,8 +184,8 @@ namespace LogicGames.Games.Minesweeper
             generate = true;
             timerCounter = 0;
             tmr.Text = "⏰: 0";
-            mineCount = 10;
-            leftOverMines = 10;
+            mineCount = originalMineCount;
+            leftOverMines = originalMineCount;
             mineCount_l.Text = $"🏴: {mineCount}";
         }
 
@@ -246,9 +255,14 @@ namespace LogicGames.Games.Minesweeper
             {
                 for (int j = 0; j < fieldSize.Height; j++)
                 {
-                    if ((field[i, j] == 1) && (btnArray[i, j].Text == "🏴"))
+                    if ((field[i, j] == 1))
                     {
-                        leftOverMines--;
+                        if (btnArray[i, j].Text == "🏴")
+                            leftOverMines--;
+                        else
+                        {
+                            btnArray[i, j].Text = "💣";
+                        }
                     }
                 }
             }
@@ -289,7 +303,7 @@ namespace LogicGames.Games.Minesweeper
                     timer.Enabled = false;
                     model.Mine = true;
                     checkLeftMines();
-                    MessageBox.Show($"Vesztettél!\nJátékban töltött idő: {timerCounter}s\nHátralévő bombák: {leftOverMines}");
+                    //MessageBox.Show($"Vesztettél!\nJátékban töltött idő: {timerCounter}s\nHátralévő bombák: {leftOverMines}");
                     Ending();
                     return;
                 }
@@ -298,7 +312,7 @@ namespace LogicGames.Games.Minesweeper
                 {
                     timer.Enabled = false;
                     model.Mine = false;
-                    MessageBox.Show("Nyertél!");
+                    //MessageBox.Show("Nyertél!");
                     Ending();
                 }
             }
