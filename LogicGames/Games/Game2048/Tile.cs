@@ -32,8 +32,10 @@ namespace LogicGames.Games.Game2048
         public int value { get; set; }
         
         public Size Size { get; set; }
+        private int border;
+
         PrivateFontCollection pfc = new PrivateFontCollection();
-        public Tile(int size, int value, Point location)
+        public Tile(int size, int border, int value, Point location)
         {
             int fontLength = Properties.Resources.ClearSans_Bold.Length;
             byte[] fontdata = Properties.Resources.ClearSans_Bold;
@@ -41,6 +43,7 @@ namespace LogicGames.Games.Game2048
             Marshal.Copy(fontdata, 0, data, fontLength);
             pfc.AddMemoryFont(data, fontLength);
             this.Size = new Size(size, size);
+            this.border = border;
             this.value = value;
 
             this.location = new Point(location.X * Size.Width, location.Y * Size.Height);
@@ -74,9 +77,9 @@ namespace LogicGames.Games.Game2048
 
             Font font = new Font(pfc.Families[0], value < 1000 ? 42 : 32);
             SizeF sizef = g.MeasureString(value.ToString(), font);
-            Rectangle rectangle = new Rectangle((int)Math.Round(location.X), (int)Math.Round(location.Y), Size.Width, Size.Height);
+            Rectangle rectangle = new Rectangle((int)Math.Round(location.X + border - ((location.X/Size.Width) * (border/4))), (int)Math.Round(location.Y + border - ((location.Y / Size.Height) * (border / 4))), (int)(Size.Width-border*1.25), (int)(Size.Height-border*1.25));
             g.FillRectangle(new SolidBrush(value <= 2048 ? colors[(int)Math.Log(value, 2) - 1] : Color.FromArgb(60, 58, 50)), rectangle);
-            g.DrawString(value.ToString(), font, new SolidBrush(value < 8 ? Color.Black : Color.White), location.X + (Size.Width / 2) - (sizef.Width / 2), location.Y + (Size.Height / 2) - (sizef.Height / 2));
+            g.DrawString(value.ToString(), font, new SolidBrush(value < 8 ? Color.Black : Color.White), rectangle.X + (rectangle.Width / 2) - (sizef.Width / 2), rectangle.Y + (rectangle.Height / 2) - (sizef.Height / 2));
         }
     }
 }

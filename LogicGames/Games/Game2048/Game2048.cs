@@ -10,6 +10,7 @@ namespace LogicGames.Games.Game2048
     public partial class Game2048 : GameView
     {
         private const float animationTime = .1f;
+        private const int border = 12;
         private Tile tile;
         private Game2048Model model;
         private int currentTiles;
@@ -305,12 +306,13 @@ namespace LogicGames.Games.Game2048
         {
             Graphics g = e.Graphics;
             g.TranslateTransform(base.container.X, base.container.Y + base.container.Height - base.container.Width);
-            Pen p = new Pen(Color.Black, 1);
-
+            Pen p = new Pen(Resources.Colors.PrimaryText, border);
+            int borderPos = border / 2;
             for (int i = 0; i < 5; i++)
             {
-                g.DrawLine(p, i * cellSize, 0, i * cellSize, 4 * cellSize);
-                g.DrawLine(p, 0, i * cellSize, 4 * cellSize, i * cellSize);
+                g.DrawLine(p, borderPos, 0, borderPos, 4 * cellSize);
+                g.DrawLine(p, 0, borderPos, 4 * cellSize, borderPos);
+                borderPos += cellSize - (border/4);
             }
             FontFamily font = new FontFamily("Arial");
             g.DrawString($"Pont: {model.Score}", new Font(font, 16, FontStyle.Bold), new SolidBrush(Resources.Colors.PrimaryText), 10, -60);
@@ -342,7 +344,7 @@ namespace LogicGames.Games.Game2048
                     y = r.Next(0, 4);
                 }
                 while (positions[x, y] != null);
-                positions[x, y] = new Tile(cellSize, r.Next(0, 10) < 9 ? 2 : 4, new Point(x, y));
+                positions[x, y] = new Tile(cellSize, border, r.Next(0, 10) < 9 ? 2 : 4, new Point(x, y));
                 currentTiles++;
             }
         }
