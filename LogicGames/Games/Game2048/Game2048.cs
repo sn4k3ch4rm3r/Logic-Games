@@ -305,7 +305,14 @@ namespace LogicGames.Games.Game2048
         protected void Render(PaintEventArgs e, float deltaTime)
         {
             Graphics g = e.Graphics;
+
+            Font font = new Font("Arial", 16, FontStyle.Bold);
+            string score = $"Pont: {model.Score}\nRekord: {Game2048Client.Highscore}";
+            SizeF stringSize = e.Graphics.MeasureString(score, font);
+            g.DrawString(score, font, new SolidBrush(Resources.Colors.PrimaryText), base.container.Left + (base.container.Width / 2) - (stringSize.Width / 2), base.container.Top + ((base.container.Height - base.container.Width) / 2) - (stringSize.Height / 2));
+            
             g.TranslateTransform(base.container.X, base.container.Y + base.container.Height - base.container.Width);
+            
             Pen p = new Pen(Resources.Colors.PrimaryText, border);
             int borderPos = border / 2;
             for (int i = 0; i < 5; i++)
@@ -314,8 +321,6 @@ namespace LogicGames.Games.Game2048
                 g.DrawLine(p, 0, borderPos, 4 * cellSize, borderPos);
                 borderPos += cellSize - (border/4);
             }
-            FontFamily font = new FontFamily("Arial");
-            g.DrawString($"Pont: {model.Score}", new Font(font, 16, FontStyle.Bold), new SolidBrush(Resources.Colors.PrimaryText), 10, -60);
 
             if (positions.Length > 0)
             {
