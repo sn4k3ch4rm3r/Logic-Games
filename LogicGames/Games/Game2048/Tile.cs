@@ -22,7 +22,6 @@ namespace LogicGames.Games.Game2048
             Color.FromArgb(237, 194, 45),
         };
 
-        
         private float ellapsedTime = 0;
 
         private PointF location;
@@ -61,23 +60,20 @@ namespace LogicGames.Games.Game2048
 
         private float Lerp(float a, float b, float t)
         {
-            return a + (b - a) * t;
+            return a + ((b - a) * t);
         }
 
         public void Render(Graphics g, float deltaTime, float animationTime)
         {
-            //int speed = (int)(((target.X - previous.X) * Size.Width) / animationTime);
-            //location.X += speed * deltaTime;
-
             if (ellapsedTime+deltaTime < animationTime)
                 ellapsedTime += deltaTime;
             else ellapsedTime = animationTime;
             location.X = Lerp(previous.X, target.X, ellapsedTime/animationTime) * Size.Width;
             location.Y = Lerp(previous.Y, target.Y, ellapsedTime/animationTime) * Size.Width;
 
-            Font font = new Font(pfc.Families[0], value < 1000 ? 42 : 32);
+            Font font = new Font(pfc.Families[0], value < 1000 ? 35 : 28);
             SizeF sizef = g.MeasureString(value.ToString(), font);
-            Rectangle rectangle = new Rectangle((int)Math.Round(location.X + border - ((location.X/Size.Width) * (border/4))), (int)Math.Round(location.Y + border - ((location.Y / Size.Height) * (border / 4))), (int)(Size.Width-border*1.25), (int)(Size.Height-border*1.25));
+            Rectangle rectangle = new Rectangle((int)Math.Round(location.X + border - ((location.X/Size.Width) * (border/4))), (int)Math.Round(location.Y + border - ((location.Y / Size.Height) * (border / 4))), (int)(Size.Width - (border * 1.25)), (int)(Size.Height - (border * 1.25)));
             g.FillRectangle(new SolidBrush(value <= 2048 ? colors[(int)Math.Log(value, 2) - 1] : Color.FromArgb(60, 58, 50)), rectangle);
             g.DrawString(value.ToString(), font, new SolidBrush(value < 8 ? Color.Black : Color.White), rectangle.X + (rectangle.Width / 2) - (sizef.Width / 2), rectangle.Y + (rectangle.Height / 2) - (sizef.Height / 2));
         }
