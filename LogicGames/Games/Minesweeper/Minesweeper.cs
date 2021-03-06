@@ -33,7 +33,6 @@ namespace LogicGames.Games.Minesweeper
         private Size labelSize = new Size(120, 45);
         private int originalMineCount = 15;
         private int mineCount;
-        private int leftOverMines;
 
         private int cellSize;
 
@@ -44,7 +43,6 @@ namespace LogicGames.Games.Minesweeper
             this.Resize += OnResize;
             rnd = new Random();
             mineCount = originalMineCount;
-            leftOverMines = originalMineCount;
             btnArray = new Button[fieldSize.Width, fieldSize.Height];
             field = new int[fieldSize.Width, fieldSize.Height]; //1 = mine, 0 = free space
             timer.Interval = 1000;
@@ -185,7 +183,6 @@ namespace LogicGames.Games.Minesweeper
             timerCounter = 0;
             tmr.Text = "⏰: 0";
             mineCount = originalMineCount;
-            leftOverMines = originalMineCount;
             mineCount_l.Text = $"🏴: {mineCount}";
         }
 
@@ -255,14 +252,14 @@ namespace LogicGames.Games.Minesweeper
             {
                 for (int j = 0; j < fieldSize.Height; j++)
                 {
-                    if ((field[i, j] == 1))
+                    if (field[i, j] == 1 && btnArray[i, j].Text != "🏴")
                     {
-                        if (btnArray[i, j].Text == "🏴")
-                            leftOverMines--;
-                        else
-                        {
-                            btnArray[i, j].Text = "💣";
-                        }
+                        btnArray[i, j].ForeColor = Color.Black;
+                        btnArray[i, j].Text = "💣";
+                    }
+                    else if (field[i, j] == 0 && btnArray[i, j].Text == "🏴")
+                    {
+                        btnArray[i, j].Text = "❌";
                     }
                 }
             }

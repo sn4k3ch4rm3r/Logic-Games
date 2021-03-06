@@ -24,6 +24,8 @@ namespace LogicGames.Games.Minesweeper
             SizeF stringSize = e.Graphics.MeasureString(this.Text, this.Font);
             if (this.Text == "🏴" || this.Text == "💣")
                 stringSize.Width += 10;
+            else if (this.Text == "❌")
+                stringSize.Width += 5;
             TextRenderer.DrawText(e.Graphics,this.Text, this.Font, new Point((this.ClientRectangle.Width / 2) - (int)(stringSize.Width / 2), (this.ClientRectangle.Height / 2) - (int)(stringSize.Height / 2)), this.ForeColor, this.BackColor);
         }
 
