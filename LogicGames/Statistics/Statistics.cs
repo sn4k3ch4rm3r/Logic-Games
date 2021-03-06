@@ -21,17 +21,18 @@ namespace LogicGames.Statistics
             private SolidBrush brush;
             private string text;
 
-            public String(string text, Font font, Color color, int x, int y)
+            public String(string text, Font font, Color color, int offset = 0)
             {
                 this.text = text;
                 this.font = font;
                 this.brush = new SolidBrush(color);
-                this.offset = new Point(x,y);
+                this.offset = new Point(0,offset);
             }
 
-            public void Render(Graphics g)
+            public void Render(Graphics g, Rectangle containter)
             {
                 SizeF size = g.MeasureString(text, font);
+                offset.X = (containter.Width / 2) - (int)(size.Width / 2);
                 g.DrawString(text, font, brush, offset);
                 g.TranslateTransform(0, offset.Y + size.Height);
             }
@@ -56,25 +57,25 @@ namespace LogicGames.Statistics
 
             texts = new List<String>();
             //2048
-            texts.Add(new String("2048", titleFont, Resources.Colors.PrimaryText, 0, 10));
-            texts.Add(new String($"Rekord: {Database.GameClients.Game2048Client.Highscore}", font, Resources.Colors.PrimaryText, 0, 5));
-            texts.Add(new String($"Megnyert játékok: {Database.GameClients.Game2048Client.GamesWon}", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Játékidő: {Database.GameClients.Game2048Client.Playtime / 60} perc", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Játszott játékok: {Database.GameClients.Game2048Client.GamesPlayed}", font, Resources.Colors.PrimaryText, 0, 0));
+            texts.Add(new String("2048", titleFont, Resources.Colors.PrimaryText, 10));
+            texts.Add(new String($"Rekord: {Database.GameClients.Game2048Client.Highscore}", font, Resources.Colors.PrimaryText, 5));
+            texts.Add(new String($"Megnyert játékok: {Database.GameClients.Game2048Client.GamesWon}", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Játékidő: {Database.GameClients.Game2048Client.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Játszott játékok: {Database.GameClients.Game2048Client.GamesPlayed}", font, Resources.Colors.PrimaryText));
             //Tetris
-            texts.Add(new String("Tetris", titleFont, Resources.Colors.PrimaryText, 0, 30));
-            texts.Add(new String($"Rekord: {Database.GameClients.TetrisClient.Highscore}", font, Resources.Colors.PrimaryText, 0, 5));
-            texts.Add(new String($"Törölt sorok: {Database.GameClients.TetrisClient.LinesCleared}", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Játékidő: {Database.GameClients.TetrisClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Játszott játékok: {Database.GameClients.TetrisClient.GamesPlayed}", font, Resources.Colors.PrimaryText, 0, 0));
+            texts.Add(new String("Tetris", titleFont, Resources.Colors.PrimaryText, 30));
+            texts.Add(new String($"Rekord: {Database.GameClients.TetrisClient.Highscore}", font, Resources.Colors.PrimaryText, 5));
+            texts.Add(new String($"Törölt sorok: {Database.GameClients.TetrisClient.LinesCleared}", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Játékidő: {Database.GameClients.TetrisClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Játszott játékok: {Database.GameClients.TetrisClient.GamesPlayed}", font, Resources.Colors.PrimaryText));
             //Minesweeper
-            texts.Add(new String("Aknakereső", titleFont, Resources.Colors.PrimaryText, 0, 30));
-            texts.Add(new String($"Legjobb idő: {Database.GameClients.MinesweeperClient.Highscore}", font, Resources.Colors.PrimaryText, 0, 5));
-            texts.Add(new String($"Megnyert játékok: {Database.GameClients.MinesweeperClient.GamesWon}", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Felfedezett mezők: {Database.GameClients.MinesweeperClient.SquaresDiscovered}", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Lerakott zászlók: {Database.GameClients.MinesweeperClient.FlagsPlaced}", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Játékidő: {Database.GameClients.MinesweeperClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText, 0, 0));
-            texts.Add(new String($"Játszott játékok: {Database.GameClients.MinesweeperClient.GamesPlayed}", font, Resources.Colors.PrimaryText, 0, 0));
+            texts.Add(new String("Aknakereső", titleFont, Resources.Colors.PrimaryText, 30));
+            texts.Add(new String($"Legjobb idő: {Database.GameClients.MinesweeperClient.Highscore}", font, Resources.Colors.PrimaryText, 5));
+            texts.Add(new String($"Megnyert játékok: {Database.GameClients.MinesweeperClient.GamesWon}", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Felfedezett mezők: {Database.GameClients.MinesweeperClient.SquaresDiscovered}", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Lerakott zászlók: {Database.GameClients.MinesweeperClient.FlagsPlaced}", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Játékidő: {Database.GameClients.MinesweeperClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
+            texts.Add(new String($"Játszott játékok: {Database.GameClients.MinesweeperClient.GamesPlayed}", font, Resources.Colors.PrimaryText));
         }
 
         private void backButtonClick(object sender, EventArgs e)
@@ -93,7 +94,7 @@ namespace LogicGames.Statistics
 
             foreach (String text in texts)
             {
-                text.Render(e.Graphics);
+                text.Render(e.Graphics, base.container);
             }
         }
 
