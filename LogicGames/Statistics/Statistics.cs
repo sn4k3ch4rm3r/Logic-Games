@@ -20,7 +20,6 @@ namespace LogicGames.Statistics
             private Font font;
             private SolidBrush brush;
             private string text;
-            private int height;
 
             public String(string text, Font font, Color color, int x, int y)
             {
@@ -28,7 +27,6 @@ namespace LogicGames.Statistics
                 this.font = font;
                 this.brush = new SolidBrush(color);
                 this.offset = new Point(x,y);
-                this.height = 0;
             }
 
             public void Render(Graphics g)
@@ -87,6 +85,10 @@ namespace LogicGames.Statistics
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.FillRectangle(new SolidBrush(Resources.Colors.ContainterBackground), 0, 0, this.ClientRectangle.Width, headerHeight);
+            string header = "Statisztika";
+            Font headerFont = new Font("Arial", 20, FontStyle.Bold);
+            SizeF headerSize = e.Graphics.MeasureString(header, headerFont);
+            e.Graphics.DrawString(header, headerFont, new SolidBrush(Resources.Colors.PrimaryText), (ClientRectangle.Width / 2) - (headerSize.Width / 2), (headerHeight / 2) - (headerSize.Height / 2));
             e.Graphics.TranslateTransform(base.container.Left, base.container.Top);
 
             foreach (String text in texts)
