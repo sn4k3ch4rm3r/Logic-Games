@@ -105,7 +105,7 @@ namespace LogicGames.Games.Minesweeper
         {
             int i = 0;
             List<string> already_mine = new List<string>();
-            while (i < mineCount)
+            while (i < originalMineCount)
             {
                 int column_add = rnd.Next(fieldSize.Width), row_add = rnd.Next(fieldSize.Height);
                 string coords = column_add.ToString() + "," + row_add.ToString();
