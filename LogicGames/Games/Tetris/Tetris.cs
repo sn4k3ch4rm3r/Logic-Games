@@ -98,7 +98,7 @@ namespace LogicGames.Games.Tetris
             gameOver = true;
             model.Time = (int)timer.Elapsed.TotalSeconds;
             model.Save();
-            Menus.GameMenu gameOverMenu = new Menus.GameMenu("Új játék", "Kilépés");
+            Menus.GameMenu gameOverMenu = new Menus.GameMenu(subtitle: $"Elért pontok: {model.Score}\nTörölt sorok: {model.Cleared}", "Új játék", "Kilépés");
             base.ShowMenu(gameOverMenu);
         }
 

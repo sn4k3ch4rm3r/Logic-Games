@@ -124,7 +124,6 @@ namespace LogicGames.Games.Minesweeper
                 {
                     field[column_add, row_add] = 1;
                     already_mine.Add(coords);
-                    //btnArray[column_add, row_add].Text = "A";
                     i++;
                 }
             }
@@ -138,7 +137,7 @@ namespace LogicGames.Games.Minesweeper
             return new int[] { column, row };
         }
 
-        private void Ending()
+        private void Ending(string message)
         {
             model.Time = timerCounter;
             model.Flags = originalMineCount - mineCount;
@@ -147,7 +146,7 @@ namespace LogicGames.Games.Minesweeper
             {
                 button.Enabled = false;
             }
-            base.ShowMenu(new Menus.GameMenu("Új játék", "Kilépés"));
+            base.ShowMenu(new Menus.GameMenu(subtitle: message, "Új játék", "Kilépés"));
         }
 
         private bool didWin()
@@ -300,8 +299,7 @@ namespace LogicGames.Games.Minesweeper
                     timer.Enabled = false;
                     model.Mine = true;
                     checkLeftMines();
-                    //MessageBox.Show($"Vesztettél!\nJátékban töltött idő: {timerCounter}s\nHátralévő bombák: {leftOverMines}");
-                    Ending();
+                    Ending($"Vesztettél\nEltelt idő: {timerCounter} mp");
                     return;
                 }
                 FindMines(column, row);
@@ -309,8 +307,7 @@ namespace LogicGames.Games.Minesweeper
                 {
                     timer.Enabled = false;
                     model.Mine = false;
-                    //MessageBox.Show("Nyertél!");
-                    Ending();
+                    Ending($"Nyertél\nEltelt idő: {timerCounter} mp");
                 }
             }
         }

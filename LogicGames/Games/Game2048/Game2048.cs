@@ -62,12 +62,12 @@ namespace LogicGames.Games.Game2048
             if (didWin && !seenMenu)
             {
                 isMenuShowing = true;
-                base.ShowMenu(new Menus.GameMenu("Folytatás", "Új játék", "Kilépés"));
+                base.ShowMenu(new Menus.GameMenu(subtitle: "Nyertél\nFolytathatod a játékot,\nvagy újat kezdhetsz", "Folytatás", "Új játék", "Kilépés"));
             }
             if (currentTiles == 16 && gameOver())
             {
                 isMenuShowing = true;
-                base.ShowMenu(new Menus.GameMenu("Új játék", "Kilépés"));
+                base.ShowMenu(new Menus.GameMenu(subtitle: "Veszítettél", "Új játék", "Kilépés"));
             }
         }
 
