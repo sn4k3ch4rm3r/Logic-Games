@@ -309,7 +309,9 @@ namespace LogicGames.Games.Game2048
             Font font = new Font("Arial", 16, FontStyle.Bold);
             string score = $"Pont: {model.Score}\nRekord: {Game2048Client.Highscore}";
             SizeF stringSize = e.Graphics.MeasureString(score, font);
-            g.DrawString(score, font, new SolidBrush(Resources.Colors.PrimaryText), base.container.Left + (base.container.Width / 2) - (stringSize.Width / 2), base.container.Top + ((base.container.Height - base.container.Width) / 2) - (stringSize.Height / 2));
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            g.DrawString(score, font, new SolidBrush(Resources.Colors.PrimaryText), base.container.Left + (base.container.Width / 2), base.container.Top + ((base.container.Height - base.container.Width) / 2) - (stringSize.Height / 2), sf);
             
             g.TranslateTransform(base.container.X, base.container.Y + base.container.Height - base.container.Width);
             

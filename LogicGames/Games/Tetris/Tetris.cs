@@ -152,10 +152,12 @@ namespace LogicGames.Games.Tetris
             Font font = new Font("Arial", 15);
             SolidBrush textBrush = new SolidBrush(Resources.Colors.PrimaryText);
             SizeF stringSize = g.MeasureString("Következő:", font);
-            int beginText = board.NextDisplayRect.Left - 3;
+            int beginText = (board.Size.Width * board.BlockSize) + (base.container.Width - board.Size.Width * board.BlockSize) / 2;
 
-            g.DrawString("Következő:", font, textBrush, beginText, board.NextDisplayRect.Top - stringSize.Height);
-            g.DrawString($"Pontszám: {model.Score}\nRekord: {TetrisClient.Highscore}\nSorok: {model.Cleared}", font, textBrush, beginText, 30);
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            g.DrawString("Következő:", font, textBrush, beginText, board.NextDisplayRect.Top - stringSize.Height, sf);
+            g.DrawString($"Pontszám: {model.Score}\nRekord: {TetrisClient.Highscore}\nSorok: {model.Cleared}", font, textBrush, beginText, 30, sf);
             if(!gameOver) { 
                 Invalidate();
             }
