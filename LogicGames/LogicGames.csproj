@@ -7,7 +7,7 @@
     <ProjectGuid>{EAAE8B8B-A56E-4F77-85DA-02B7B00AA56A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>LogicGames</RootNamespace>
-    <AssemblyName>LogicGames</AssemblyName>
+    <AssemblyName>JatekKancso</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -54,6 +54,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>kancso.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data, Version=8.0.13.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
@@ -229,6 +232,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Database\MySql.Data.dll" />
+    <Content Include="kancso.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
