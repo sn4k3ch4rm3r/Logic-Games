@@ -7,26 +7,25 @@ using MySql.Data.MySqlClient;
 
 namespace LogicGames.Database
 {
-    class DatabaseHandler
+    static class DatabaseHandler
     {
-        private DatabaseConfig config;
-        private MySqlConnection conn;
-        public DatabaseHandler()
-        {
-            if (DatabaseConfigManager.Exists()) config = DatabaseConfigManager.Load();
-            else config = DatabaseConfigManager.Create();
-            Setup();
-        }
+        public static DatabaseConfig Config { get; set; }
+        private static MySqlConnection conn;
 
-        private void Setup()
+        public static void Setup()
         {
-            MySqlConnection conn = new MySqlConnection($"server='{config.Address}';user='{config.Username}';password='{config.Password}'");
+            if (Config == null)
+            {
+                if (DatabaseConfigManager.Exists()) Config = DatabaseConfigManager.Load();
+                else Config = DatabaseConfigManager.Create();
+            }
+            MySqlConnection conn = new MySqlConnection($"server='{Config.Address}';user='{Config.Username}';password='{Config.Password}'");
             conn.Open();
 
             MySqlCommand createDB = new MySqlCommand
             (
-                $"CREATE DATABASE IF NOT EXISTS {config.Database};" +
-                $"USE {config.Database};" +
+                $"CREATE DATABASE IF NOT EXISTS {Config.Database};" +
+                $"USE {Config.Database};" +
                 $"CREATE TABLE IF NOT EXISTS tetris (id int PRIMARY KEY AUTO_INCREMENT, score int, cleared int, o int, i int, l int, j int, t int, s int, z int, time int);" +
                 $"CREATE TABLE IF NOT EXISTS minesweeper (id int PRIMARY KEY AUTO_INCREMENT, time int, flags int, checked int, mine boolean);" +
                 $"CREATE TABLE IF NOT EXISTS game2048 (id int PRIMARY KEY AUTO_INCREMENT, score int, tile2 int, tile4 int, tile8 int, tile16 int, tile32 int, tile64 int, tile128 int, tile256 int, tile512 int, tile1024 int, tile2048 int, tileMore int, time int);",
@@ -40,16 +39,16 @@ namespace LogicGames.Database
         /// <summary>
         /// Open the MySqlConnection
         /// </summary>
-        public void Open()
+        public static void Open()
         {
-            conn = new MySqlConnection($"server='{config.Address}';user='{config.Username}';password='{config.Password}';database='{config.Database}'");
+            conn = new MySqlConnection($"server='{Config.Address}';user='{Config.Username}';password='{Config.Password}';database='{Config.Database}'");
             conn.Open();
         }
 
         /// <summary>
         /// Close the MySqlConnection
         /// </summary>
-        public void Close()
+        public static void Close()
         {
             conn.Close();
         }
@@ -63,7 +62,7 @@ namespace LogicGames.Database
         /// <returns>
         /// All the records in a dictionary list
         /// </returns>
-        public List<Dictionary<string, object>> ExecuteRequest(string query)
+        public static List<Dictionary<string, object>> ExecuteRequest(string query)
         {
             MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -91,7 +90,7 @@ namespace LogicGames.Database
         /// <returns>
         /// The number of rows affected.
         /// </returns>
-        public int ExecuteCommand(string command)
+        public static int ExecuteCommand(string command)
         {
             MySqlCommand cmd = new MySqlCommand(command, conn);
             return cmd.ExecuteNonQuery();

@@ -12,8 +12,6 @@ namespace LogicGames.Database.Models
         public int Flags { get; set; }
         public int Checked { get; set; }
         public bool Mine { get; set; }
-
-        private DatabaseHandler dbHandler = new DatabaseHandler();
         public string Table { get { return "minesweeper"; } }
 
         public MinesweeperModel()
@@ -34,9 +32,9 @@ namespace LogicGames.Database.Models
 
         public void Save()
         {
-            dbHandler.Open();
-            dbHandler.ExecuteCommand($"INSERT INTO {Table} (time, flags, checked, mine) VALUES ({Time}, {Flags}, {Checked}, {(Mine?1:0)})");
-            dbHandler.Close();
+            DatabaseHandler.Open();
+            DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (time, flags, checked, mine) VALUES ({Time}, {Flags}, {Checked}, {(Mine?1:0)})");
+            DatabaseHandler.Close();
         }
     }
 }

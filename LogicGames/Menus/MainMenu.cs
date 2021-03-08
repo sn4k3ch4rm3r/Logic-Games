@@ -112,5 +112,28 @@ namespace LogicGames.Menus
         {
             CenterButtonPanel();
         }
+
+        private void MainMenu_Shown(object sender, EventArgs e)
+        {
+            try
+            {
+                Database.DatabaseHandler.Setup();
+            }
+            catch
+            {
+                Form errorForm = new DatabaseUnavailable();
+                errorForm.ShowDialog();
+                switch(errorForm.DialogResult)
+                {
+                    case DialogResult.Abort:
+                        Environment.Exit(0);
+                        break;
+                    case DialogResult.Yes:
+                        Form dbSettings = new DatabaseSettingsForm();
+                        dbSettings.ShowDialog();
+                        break;
+                }
+            }
+        }
     }
 }

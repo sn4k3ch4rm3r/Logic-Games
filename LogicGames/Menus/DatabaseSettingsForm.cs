@@ -46,8 +46,26 @@ namespace LogicGames.Menus
 
         private void Save()
         {
-            DatabaseConfigManager.Save(tbx_user.Text, tbx_password.Text, tbx_database.Text, tbx_address.Text);
-            this.Close();
+            bool keepOpen = false;
+            try
+            {
+                DatabaseConfigManager.Save(tbx_user.Text, tbx_password.Text, tbx_database.Text, tbx_address.Text);
+            }
+            catch
+            {
+                Form form = new DatabaseUnavailable();
+                form.ShowDialog();
+                switch(form.DialogResult)
+                {
+                    case DialogResult.Abort:
+                        Environment.Exit(0);
+                        break;
+                    case DialogResult.Yes:
+                        keepOpen = true;
+                        break;
+                }
+            }
+            if (!keepOpen) this.Close();
         }
     }
 }

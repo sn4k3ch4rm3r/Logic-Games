@@ -131,6 +131,12 @@
     <Compile Include="Menus\DatabaseSettingsForm.Designer.cs">
       <DependentUpon>DatabaseSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Menus\DatabaseUnavailable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menus\DatabaseUnavailable.Designer.cs">
+      <DependentUpon>DatabaseUnavailable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menus\GameMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menus\DatabaseSettingsForm.resx">
       <DependentUpon>DatabaseSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menus\DatabaseUnavailable.resx">
+      <DependentUpon>DatabaseUnavailable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menus\GameMenu.resx">
       <DependentUpon>GameMenu.cs</DependentUpon>

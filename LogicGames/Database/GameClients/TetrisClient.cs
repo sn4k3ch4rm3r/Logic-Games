@@ -14,9 +14,9 @@ namespace LogicGames.Database.GameClients
         {
             get
             {
-                dbHandler.Open();
-                List<Dictionary<string,object>> result = dbHandler.ExecuteRequest($"SELECT score FROM {table} ORDER BY score DESC LIMIT 1");
-                dbHandler.Close();
+                DatabaseHandler.Open();
+                List<Dictionary<string,object>> result = DatabaseHandler.ExecuteRequest($"SELECT score FROM {table} ORDER BY score DESC LIMIT 1");
+                DatabaseHandler.Close();
                 if (result.Count > 0)
                 {
                     return Convert.ToInt32(result[0]["score"]);
@@ -29,9 +29,9 @@ namespace LogicGames.Database.GameClients
         {
             get
             {
-                dbHandler.Open();
-                List<Dictionary<string, object>> result = dbHandler.ExecuteRequest($"SELECT SUM(cleared) as `lines` FROM {table}");
-                dbHandler.Close();
+                DatabaseHandler.Open();
+                List<Dictionary<string, object>> result = DatabaseHandler.ExecuteRequest($"SELECT SUM(cleared) as `lines` FROM {table}");
+                DatabaseHandler.Close();
                 int cleared;
                 int.TryParse(result[0]["lines"].ToString(), out cleared);
                 return cleared;

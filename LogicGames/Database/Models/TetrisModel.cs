@@ -13,8 +13,6 @@ namespace LogicGames.Database.Models
         public int Time { get; set; }
         public Dictionary<char, int> Shapes { get; set; }
         public string Table { get { return "tetris"; } }
-
-        private DatabaseHandler dbHandler = new DatabaseHandler();
         public TetrisModel()
         {
             this.Score = 0;
@@ -42,10 +40,10 @@ namespace LogicGames.Database.Models
 
         public void Save()
         {
-            dbHandler.Open();
-            dbHandler.ExecuteCommand($"INSERT INTO {Table} (score, cleared, o, i, l, j, t, s, z, time) " +
+            DatabaseHandler.Open();
+            DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (score, cleared, o, i, l, j, t, s, z, time) " +
                 $"VALUES ({Score}, {Cleared}, {Shapes['o']}, {Shapes['i']}, {Shapes['l']}, {Shapes['j']}, {Shapes['t']}, {Shapes['s']}, {Shapes['z']}, {Time});");
-            dbHandler.Close();
+            DatabaseHandler.Close();
         }
     }
 }

@@ -39,6 +39,7 @@
             this.Name = "MainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KANCHO GAMES";
+            this.Shown += new System.EventHandler(this.MainMenu_Shown);
             this.ResumeLayout(false);
 
         }

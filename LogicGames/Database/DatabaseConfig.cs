@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicGames.Database
 {
-    class DatabaseConfig
+    public class DatabaseConfig
     {
         public string Database { get; set; }
         public string Username { get; set; }
