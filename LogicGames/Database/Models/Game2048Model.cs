@@ -34,10 +34,14 @@ namespace LogicGames.Database.Models
 
         public void Save()
         {
-            DatabaseHandler.Open();
-            DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (score, tile2, tile4, tile8, tile16, tile32, tile64, tile128, tile256, tile512, tile1024, tile2048, tileMore, time) " +
-                $"VALUES ({Score}, {Tiles[2]}, {Tiles[4]}, {Tiles[8]}, {Tiles[16]}, {Tiles[32]}, {Tiles[64]}, {Tiles[128]}, {Tiles[256]}, {Tiles[512]}, {Tiles[1024]}, {Tiles[2048]}, {Tiles[-1]}, {Time});");
-            DatabaseHandler.Close();
+            try
+            {
+                DatabaseHandler.Open();
+                DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (score, tile2, tile4, tile8, tile16, tile32, tile64, tile128, tile256, tile512, tile1024, tile2048, tileMore, time) " +
+                    $"VALUES ({Score}, {Tiles[2]}, {Tiles[4]}, {Tiles[8]}, {Tiles[16]}, {Tiles[32]}, {Tiles[64]}, {Tiles[128]}, {Tiles[256]}, {Tiles[512]}, {Tiles[1024]}, {Tiles[2048]}, {Tiles[-1]}, {Time});");
+                DatabaseHandler.Close();
+            }
+            catch { }
         }
     }
 }

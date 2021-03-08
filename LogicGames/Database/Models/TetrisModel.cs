@@ -40,10 +40,14 @@ namespace LogicGames.Database.Models
 
         public void Save()
         {
-            DatabaseHandler.Open();
-            DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (score, cleared, o, i, l, j, t, s, z, time) " +
-                $"VALUES ({Score}, {Cleared}, {Shapes['o']}, {Shapes['i']}, {Shapes['l']}, {Shapes['j']}, {Shapes['t']}, {Shapes['s']}, {Shapes['z']}, {Time});");
-            DatabaseHandler.Close();
+            try
+            {
+                DatabaseHandler.Open();
+                DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (score, cleared, o, i, l, j, t, s, z, time) " +
+                    $"VALUES ({Score}, {Cleared}, {Shapes['o']}, {Shapes['i']}, {Shapes['l']}, {Shapes['j']}, {Shapes['t']}, {Shapes['s']}, {Shapes['z']}, {Time});");
+                DatabaseHandler.Close();
+            }
+            catch { }
         }
     }
 }

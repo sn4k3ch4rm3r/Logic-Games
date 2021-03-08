@@ -10,18 +10,25 @@ namespace LogicGames.Database.GameClients
     {
         private static string table = "minesweeper";
 
-        public new static int Highscore
+        public new static string Highscore
         {
             get
             {
-                DatabaseHandler.Open();
-                List<Dictionary<string, object>> result = DatabaseHandler.ExecuteRequest($"SELECT time FROM {table} WHERE mine = 0 ORDER BY time LIMIT 1");
-                DatabaseHandler.Close();
-                if (result.Count > 0)
+                try
                 {
-                    return Convert.ToInt32(result[0]["time"]);
+                    DatabaseHandler.Open();
+                    List<Dictionary<string, object>> result = DatabaseHandler.ExecuteRequest($"SELECT time FROM {table} WHERE mine = 0 ORDER BY time LIMIT 1");
+                    DatabaseHandler.Close();
+                    if (result.Count > 0)
+                    {
+                        return result[0]["time"].ToString();
+                    }
+                    else return "0";
                 }
-                else return 0;
+                catch
+                {
+                    return "Hiba";
+                }
             }
         }
 

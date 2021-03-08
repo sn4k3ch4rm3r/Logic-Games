@@ -43,6 +43,7 @@ namespace LogicGames.Statistics
         public Statistics(): base()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
             this.BackColor = Resources.Colors.Background;
             Button backButton = new Resources.CustomButton();
             backButton.Location = new Point(0, 0);
@@ -56,26 +57,34 @@ namespace LogicGames.Statistics
             Font font = new Font("Arial", 12);
 
             texts = new List<String>();
-            //2048
-            texts.Add(new String("2048", titleFont, Resources.Colors.PrimaryText, 10));
-            texts.Add(new String($"Rekord: {Database.GameClients.Game2048Client.Highscore}", font, Resources.Colors.PrimaryText, 5));
-            texts.Add(new String($"Megnyert játékok: {Database.GameClients.Game2048Client.GamesWon}", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Játékidő: {Database.GameClients.Game2048Client.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Játszott játékok: {Database.GameClients.Game2048Client.GamesPlayed}", font, Resources.Colors.PrimaryText));
-            //Tetris
-            texts.Add(new String("Tetris", titleFont, Resources.Colors.PrimaryText, 30));
-            texts.Add(new String($"Rekord: {Database.GameClients.TetrisClient.Highscore}", font, Resources.Colors.PrimaryText, 5));
-            texts.Add(new String($"Törölt sorok: {Database.GameClients.TetrisClient.LinesCleared}", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Játékidő: {Database.GameClients.TetrisClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Játszott játékok: {Database.GameClients.TetrisClient.GamesPlayed}", font, Resources.Colors.PrimaryText));
-            //Minesweeper
-            texts.Add(new String("Aknakereső", titleFont, Resources.Colors.PrimaryText, 30));
-            texts.Add(new String($"Legjobb idő: {Database.GameClients.MinesweeperClient.Highscore}", font, Resources.Colors.PrimaryText, 5));
-            texts.Add(new String($"Megnyert játékok: {Database.GameClients.MinesweeperClient.GamesWon}", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Felfedezett mezők: {Database.GameClients.MinesweeperClient.SquaresDiscovered}", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Lerakott zászlók: {Database.GameClients.MinesweeperClient.FlagsPlaced}", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Játékidő: {Database.GameClients.MinesweeperClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
-            texts.Add(new String($"Játszott játékok: {Database.GameClients.MinesweeperClient.GamesPlayed}", font, Resources.Colors.PrimaryText));
+            try
+            {
+                //2048
+                texts.Add(new String("2048", titleFont, Resources.Colors.PrimaryText, 10));
+                texts.Add(new String($"Rekord: {Database.GameClients.Game2048Client.Highscore}", font, Resources.Colors.PrimaryText, 5));
+                texts.Add(new String($"Megnyert játékok: {Database.GameClients.Game2048Client.GamesWon}", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Játékidő: {Database.GameClients.Game2048Client.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Játszott játékok: {Database.GameClients.Game2048Client.GamesPlayed}", font, Resources.Colors.PrimaryText));
+                //Tetris
+                texts.Add(new String("Tetris", titleFont, Resources.Colors.PrimaryText, 30));
+                texts.Add(new String($"Rekord: {Database.GameClients.TetrisClient.Highscore}", font, Resources.Colors.PrimaryText, 5));
+                texts.Add(new String($"Törölt sorok: {Database.GameClients.TetrisClient.LinesCleared}", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Játékidő: {Database.GameClients.TetrisClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Játszott játékok: {Database.GameClients.TetrisClient.GamesPlayed}", font, Resources.Colors.PrimaryText));
+                //Minesweeper
+                texts.Add(new String("Aknakereső", titleFont, Resources.Colors.PrimaryText, 30));
+                texts.Add(new String($"Legjobb idő: {Database.GameClients.MinesweeperClient.Highscore}", font, Resources.Colors.PrimaryText, 5));
+                texts.Add(new String($"Megnyert játékok: {Database.GameClients.MinesweeperClient.GamesWon}", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Felfedezett mezők: {Database.GameClients.MinesweeperClient.SquaresDiscovered}", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Lerakott zászlók: {Database.GameClients.MinesweeperClient.FlagsPlaced}", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Játékidő: {Database.GameClients.MinesweeperClient.Playtime / 60} perc", font, Resources.Colors.PrimaryText));
+                texts.Add(new String($"Játszott játékok: {Database.GameClients.MinesweeperClient.GamesPlayed}", font, Resources.Colors.PrimaryText));
+            }
+            catch
+            {
+                texts.Clear();
+                texts.Add(new String("Hiba történt az adatok lekérdezése közben", titleFont, Resources.Colors.PrimaryText, 20));
+            }
         }
 
         private void backButtonClick(object sender, EventArgs e)

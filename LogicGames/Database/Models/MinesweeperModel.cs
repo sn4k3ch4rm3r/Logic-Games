@@ -32,9 +32,13 @@ namespace LogicGames.Database.Models
 
         public void Save()
         {
-            DatabaseHandler.Open();
-            DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (time, flags, checked, mine) VALUES ({Time}, {Flags}, {Checked}, {(Mine?1:0)})");
-            DatabaseHandler.Close();
+            try
+            {
+                DatabaseHandler.Open();
+                DatabaseHandler.ExecuteCommand($"INSERT INTO {Table} (time, flags, checked, mine) VALUES ({Time}, {Flags}, {Checked}, {(Mine ? 1 : 0)})");
+                DatabaseHandler.Close();
+            }
+            catch { }
         }
     }
 }
