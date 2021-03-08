@@ -18,8 +18,9 @@ namespace LogicGames.Games.Minesweeper
         private MinesweeperModel model;
 
         Button[,] btnArray;
-        Label mineCount_l = new Label();
-        Label tmr = new Label();
+        Label lbMineCount = new Label();
+        Label lbTime = new Label();
+        Label lbBest = new Label();
 
         Timer timer = new Timer();
         Random rnd;
@@ -30,7 +31,6 @@ namespace LogicGames.Games.Minesweeper
 
         private bool generate = true;
         private Size fieldSize = new Size(10, 10);
-        private Size labelSize = new Size(120, 45);
         private int originalMineCount = 15;
         private int mineCount;
 
@@ -53,26 +53,33 @@ namespace LogicGames.Games.Minesweeper
 
         private void Label_Create()
         {
-            mineCount_l.Location = new Point(base.container.Left, base.container.Top);
-            mineCount_l.Size = new Size(labelSize.Width, labelSize.Height);
-            mineCount_l.Font = new Font("Arial", 18, FontStyle.Bold);
-            mineCount_l.BackColor = Resources.Colors.ContainterBackground;
-            mineCount_l.ForeColor = Resources.Colors.PrimaryText;
-            mineCount_l.Text = $"🏴: {mineCount}";
-            this.Controls.Add(mineCount_l);
-            tmr.Location = new Point(base.container.Right - mineCount_l.Width, base.container.Top);
-            tmr.Size = new Size(labelSize.Width, labelSize.Height);
-            tmr.Font = new Font("Arial", 18, FontStyle.Bold);
-            tmr.BackColor = Resources.Colors.ContainterBackground;
-            tmr.ForeColor = Resources.Colors.PrimaryText;
-            tmr.Text = "⏰: 0";
-            this.Controls.Add(tmr);
+            Font font = new Font("Arial", 22, FontStyle.Bold);
+
+            lbMineCount.Font = font;
+            lbMineCount.BackColor = Resources.Colors.ContainterBackground;
+            lbMineCount.ForeColor = Color.Red;
+            lbMineCount.AutoSize = true;
+            this.Controls.Add(lbMineCount);
+
+            lbTime.Font = font; 
+            lbTime.BackColor = Resources.Colors.ContainterBackground;
+            lbTime.ForeColor = Resources.Colors.PrimaryText;
+            lbTime.AutoSize = true;
+            this.Controls.Add(lbTime);
+
+            lbBest.Font = font;
+            lbBest.BackColor = Resources.Colors.ContainterBackground;
+            lbBest.ForeColor = Color.Gold;
+            lbBest.AutoSize = true;
+            this.Controls.Add(lbBest);
+
+            SetText();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             timerCounter++;
-            tmr.Text = "⏰: " + timerCounter.ToString();
+            SetText();
         }
 
         private void Button_Create()
@@ -180,9 +187,19 @@ namespace LogicGames.Games.Minesweeper
             }
             generate = true;
             timerCounter = 0;
-            tmr.Text = "⏰: 0";
             mineCount = originalMineCount;
-            mineCount_l.Text = $"🏴: {mineCount}";
+            SetText();
+        }
+
+        private void SetText()
+        {
+            int padding = 20;
+            lbTime.Text = $"⏰: {timerCounter}";
+            lbTime.Location = new Point(base.container.Left + (base.container.Width / 2) - (lbTime.Size.Width / 2), base.container.Top + ((base.container.Height - (fieldSize.Height * cellSize)) / 2) - (lbTime.Size.Height / 2));
+            lbBest.Text = $"🏆: {MinesweeperClient.Highscore}";
+            lbBest.Location = new Point(base.container.Right - lbBest.Size.Width - padding, base.container.Top + ((base.container.Height - (fieldSize.Height * cellSize)) / 2) - (lbBest.Size.Height / 2));
+            lbMineCount.Text = $"🏴: {mineCount}";
+            lbMineCount.Location = new Point(base.container.Left + padding, base.container.Top + ((base.container.Height - (fieldSize.Height * cellSize)) / 2) - (lbMineCount.Size.Height / 2));
         }
 
         private bool isValid(int column, int row)
@@ -230,7 +247,7 @@ namespace LogicGames.Games.Minesweeper
                                 {
                                     btnArray[i, j].Text = "";
                                     mineCount++;
-                                    mineCount_l.Text = $"🏴: {mineCount}";
+                                    lbMineCount.Text = $"🏴: {mineCount}";
                                 }
                                 FindMines(i, j);
                             }
@@ -272,13 +289,13 @@ namespace LogicGames.Games.Minesweeper
                 if (clickedButton.Text == "🏴")
                 {
                     mineCount++;
-                    mineCount_l.Text = $"🏴: {mineCount}";
+                    lbMineCount.Text = $"🏴: {mineCount}";
                     clickedButton.Text = "";
                 }
                 else if (mineCount > 0)
                 {
                     mineCount--;
-                    mineCount_l.Text = $"🏴: {mineCount}";
+                    lbMineCount.Text = $"🏴: {mineCount}";
                     clickedButton.Text = "🏴";
                 }
                 clickedButton.ForeColor = Color.Red;
@@ -338,8 +355,7 @@ namespace LogicGames.Games.Minesweeper
                     );
                 }
             }
-            mineCount_l.Location = new Point(base.container.Left, base.container.Top);
-            tmr.Location = new Point(base.container.Right - mineCount_l.Width, base.container.Top);
+            SetText();
         }
     }
 }
