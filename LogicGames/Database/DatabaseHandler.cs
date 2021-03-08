@@ -11,6 +11,7 @@ namespace LogicGames.Database
     {
         public static DatabaseConfig Config { get; set; }
         private static MySqlConnection conn;
+        private static bool connectionValid = false;
 
         public static void Setup()
         {
@@ -34,6 +35,7 @@ namespace LogicGames.Database
             
             createDB.ExecuteNonQuery();
             conn.Close();
+            connectionValid = true;
         }
 
         /// <summary>
@@ -41,8 +43,16 @@ namespace LogicGames.Database
         /// </summary>
         public static void Open()
         {
-            conn = new MySqlConnection($"server='{Config.Address}';user='{Config.Username}';password='{Config.Password}';database='{Config.Database}'");
-            conn.Open();
+            if (!connectionValid) return;
+            try
+            {
+                conn = new MySqlConnection($"server='{Config.Address}';user='{Config.Username}';password='{Config.Password}';database='{Config.Database}'");
+                conn.Open();
+            }
+            catch
+            {
+                connectionValid = false;
+            }
         }
 
         /// <summary>
