@@ -67,7 +67,10 @@ namespace LogicGames.Games.Tetris
                 }
 
                 if (!currentShape.Moved || currentShape.Location.Y < 0)
+                {
                     GameOver();
+                    return;
+                }
                 NextShape();
             }
         }
