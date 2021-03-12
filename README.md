@@ -1,14 +1,17 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/sn4k3ch4rm3r/logic-games/badge/master)](https://www.codefactor.io/repository/github/sn4k3ch4rm3r/logic-games/overview/master)
 
+# Telepítés
+Maga a program nem igényel különösebb telepítést, csak el kell indítanunk a `Játék` mappában található `JatekKancso.exe` fájlt és már használhatjuk is, azonban a program összes funkciójának működéséhez adatbázis kapcsolatra van szükségünk. A főmenü `Adatbázis Beállítások` vagy a `Játék` mappában található `config.json` fájl segítségével adhatjuk meg a MySQL adatbázis címét, bejelentkezési adatait, illetve a program által használt adatbázis nevét. Ezen kívül nincs más teendőnk, amennyiben az adatbázis, vagy valamelyik a program által használt tábla nem áll rendelkezésre, az automatikusan létrehozásra kerül.
 # Tetris
 ### Leírás
 Klasszikus játék, 1984-ben jött ki az első verziója. Azóta sok verziója jött ki, ahol különböző játékszabályokkal kell minél tovább jutni, vagy szinteket teljesíteni. Tóth Boldizsár az eredeti szabályokkal írta meg. 
-### Játék menete: 
-- Nyilakkal lehet irányítani:
-  - Fel nyíllal lehet forgatni az éppen leeső tetriminot.
-  - Le nyíllal lehet felgyorsítani az esését. Ilyenkor több pontot kap a felhasználó.
-  - Jobb/Bal nyilakkal lehet vízszintesen mozgatni.
--	Úgy kell egymás mellé helyezni az ábrákat, hogy ne maradjanak lyukak. Ha egy teljes sort sikerül lyukak nélkül megépíteni, a sor eltűnik.
+### Irányítás
+A formákat a nyilak segítségével tudjuk irányítani.
+- ⬅/➡ segítségével tudjuk a jelenlegi formát jobra/balra elmozdítani
+- ⬆ segítségével forgathatjuk a jelenlegi formát
+- ⬇ segítségével felgyorsíthatjuk a jelenlegi forma esését, ilyenkor kétszer annyi pontot kapunk, mint ha csak az alapsebességgel esne
+### A játék célja
+A pálya tetején megjelenő formákat kell úgy mozgatnunk, hogy mikor leérkeznek a lehető legkevesebb üres hely maradjon ki, ha egy teljes sort sikerült feltöltenünk, az a sor törlésre kerül, a följebb lévő sorok pedig lejjebb kerülnek, ezen kívöl bónusz pontokat kapunk, attól függően, hogy egyszerre hány sort töröltünk így egyetlen sor 100 pontot ér, ha pedig egyszerre négy sort törlünk az 800 pontot ér. Az elhelyezés előre tervezését segíti az oldalt megjelenő ábra, ami megmutatja, hogy mi lesz a következő forma. A játék akkor ér véget, hogyha nem tudtunk elég sort törölni és a formák elérik a játéktér tetejét.
 ### Statisztika
 - Legmagasabb pontszám
 - Törölt sorok
@@ -20,15 +23,13 @@ Klasszikus játék, 1984-ben jött ki az első verziója. Azóta sok verziója j
 
 # 2048
 ### Leírás
-2014-ben jött ki a játék, eredetileg JavaScriptben írták. Tóth Balázs az alap szabályukon alapuló 2048 játékot írta meg.
-### Játék menete
-- Nyilakkal lehet irányítani:
-  - Nyilakkal lehet mozgatni a csempéket. A nyíl megnyomására az összes csempe a pályán elmozdul abba az irányba, ha el tud.
-- Úgy kell a számokat mozgatni, hogy a 2 hatványai végül 2048-at adjanak ki.
-- A játék akkor ér véget:
-  - ha már egyik csempét sem tudod mozgatni egyik irányba sem.
-  - vagy ha egyik csempének az értéke egyenlő 2048-cal.
-    - viszont ilyenkor a játék megkérdezi, hogy szeretnéd-e folytatni.
+2014-ben jött ki [az eredeti játék](https://play2048.co/). Tóth Balázs az alap szabályokon alapuló 2048 játékot írta meg.
+### Irányítás
+A ⬅⬆➡⬇ nyilak segítségével mozdíthatjuk el a csempéket, ilyenkor az összes csempe az adott irányba mozdul egészen amíg a pálya szélébe vagy egy másik csempébe nem ütközik.
+### A játék célja
+A játék kezdetén kettő, ezután minden lépésnél egy új csempe jelenik meg, melynek értéke lehet 2, vagy ritkább esetben 4.
+Mozgatás során hogyha két egyforma értékű csempe van egymás mellett, akkor egy csempévé olvadnak össze, és értékük össze adódik, a feladatunk, hogy ilyen módon elérjük a 2048-at, ilyenkor a játékot befejezhetjük, vagy folytathatjuk tovább.
+A játék akkor is véget ér, hogyha a pálya megtelik, és nincs két egyforma értékű csempe egymás mellett, ilyenkor azonban veszítettünk.
 ### Statisztika
 - Legmagasabb pontszám
 - Megnyert játékok száma
@@ -39,19 +40,15 @@ Klasszikus játék, 1984-ben jött ki az első verziója. Azóta sok verziója j
 
 # Aknakereső
 ### Leírás
-Az aknakereső (Minesweeper) számítógépes játék, melynek célja a mezőn lévő összes akna megtalálása, illetve azok elkerülése. Az aknakereső alapvetően logikai játék, de bármely játékmenetben előfordulhat olyan szituáció is, amelyben a helyes megoldás a szerencsén múlik. Egyszemélyes játék, de létezik kétszemélyes változata is, annak szabályai és stratégiái néhány ponton eltérnek az egyszemélyes verzióétól.
-### Játék menete 
-- Egy egyforma mezőkre osztott táblával indul a játék, ezek alatt rejtőzködnek az aknák. A tábla mérete és az aknák száma a nehézségi szinttől függően változik.
-- A mezők állapotai a következők lehetnek:
-  - lefedett (alaphelyzet),
-  - feltárt, szomszédos aknával,
-  - feltárt aknamentes,
-  - zászlós (véleményünk szerint akna van alatta),
-  - kérdőjeles (lehetséges, hogy akna van alatta),
-  - feltárt, robbanó aknával (ha egy mező ilyen állapotba kerül, a játék véget ér, a játékos a menetet elvesztette).
-- Egéren bal kattintással a mezőre tippet hajtunk végre, hogy azt mondjuk, hogy ott nincs bomba
-- Egéren jobb kattintással a mezőre tippet hajtunk végre, hogy azt mondjuk, hogy ott a felhasználó szerint biztosan van bomba.
-- A program folyamatosan jelzi a még megjelöletlen aknák számát, illetve az eltelt időt.
+A játék legismertebb verziója először 1990-ben jelent meg, igazán akkor vált elterjedté, amikor 1992-ben bekerült a Windows 3.1-be és egészen Windows 7-ig elérhető volt az operációs rendszer programjai közt kisebb változtatásokkal. Tóth Bálint a [Google által készített változat](https://www.google.com/fbx?fbx=minesweeper) mintájára készítette el ezt a játékot.
+### Irányítás
+A bal egérgomb segítségével fedhetünk fel mezőket.
+A jobb egérgomb segítségével helyezhetünk el illetve távolíthatunk el zászlókat. Zászlóval megjelölt mezőt nem tudunk felfedni, először el kell távolítanunk a zászlót.
+### A játék célja
+Fel kell fednünk az összes olyan mezőt, ahol nincs akna. A zászlóknak a játék eredménye szempontjából nincs jelentősége, csupán nekünk szolgálnak segítségül, így nem tudunk véletlenül felfedni olyan mezőt, amiről biztosan tudjuk, hogy akna, illetve segít átlátni a játékteret. 
+A felfedett mezőnek háromféle állapota lehet:
+- Üres: ez azt jelenti, hogy az adott mezőn illteve közvetlen szomszédjában nincs egy akna sem. Üres mező esetén az összes környező üres mező is felfedésre kerül egészen addig amíg szám mezőbe nem ütközünk.
+- Szám: a mezőn egy szám jelenik meg 1 és 8 között, ez azt jelenti, hogy az adott mező közvetlen szomszédai közül hány mező tartalmaz aknát. Szomszédnak számítanak az adott mező oldalait illetve sarkait érintő mezők.
 ### Statisztika
 - Legjobb időt, ami alatt megnyerted a játékot
 - Megnyert játékok száma
