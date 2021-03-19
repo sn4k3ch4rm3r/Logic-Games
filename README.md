@@ -7,11 +7,11 @@ Maga a program nem igényel különösebb telepítést, csak el kell indítanunk
 Klasszikus játék, 1984-ben jött ki az első verziója. Azóta sok verziója jött ki, ahol különböző játékszabályokkal kell minél tovább jutni, vagy szinteket teljesíteni. Tóth Boldizsár az eredeti szabályokkal írta meg. 
 ### Irányítás
 A formákat a nyilak segítségével tudjuk irányítani.
-- ⬅/➡ segítségével tudjuk a jelenlegi formát jobra/balra elmozdítani
+- ⬅/➡ segítségével tudjuk a jelenlegi formát jobbra/balra elmozdítani
 - ⬆ segítségével forgathatjuk a jelenlegi formát
 - ⬇ segítségével felgyorsíthatjuk a jelenlegi forma esését, ilyenkor kétszer annyi pontot kapunk, mint ha csak az alapsebességgel esne
 ### A játék célja
-A pálya tetején megjelenő formákat kell úgy mozgatnunk, hogy mikor leérkeznek a lehető legkevesebb üres hely maradjon ki, ha egy teljes sort sikerült feltöltenünk, az a sor törlésre kerül, a följebb lévő sorok pedig lejjebb kerülnek, ezen kívöl bónusz pontokat kapunk, attól függően, hogy egyszerre hány sort töröltünk így egyetlen sor 100 pontot ér, ha pedig egyszerre négy sort törlünk az 800 pontot ér. Az elhelyezés előre tervezését segíti az oldalt megjelenő ábra, ami megmutatja, hogy mi lesz a következő forma. A játék akkor ér véget, hogyha nem tudtunk elég sort törölni és a formák elérik a játéktér tetejét.
+A pálya tetején megjelenő formákat kell úgy mozgatnunk, hogy mikor leérkeznek a lehető legkevesebb üres hely maradjon ki, ha egy teljes sort sikerült feltöltenünk, az a sor törlésre kerül, a feljebb lévő sorok pedig lejjebb kerülnek, ezen kívül bónusz pontokat kapunk, attól függően, hogy egyszerre hány sort töröltünk így egyetlen sor 100 pontot ér, ha pedig egyszerre négy sort törlünk az 800 pontot ér. Az elhelyezés előre tervezését segíti az oldalt megjelenő ábra, ami megmutatja, hogy mi lesz a következő forma. A játék akkor ér véget, hogyha nem tudtunk elég sort törölni és a formák elérik a játéktér tetejét.
 ### Statisztika
 - Legmagasabb pontszám
 - Törölt sorok
@@ -23,7 +23,7 @@ A pálya tetején megjelenő formákat kell úgy mozgatnunk, hogy mikor leérkez
 
 # 2048
 ### Leírás
-2014-ben jött ki [az eredeti játék](https://play2048.co/). Tóth Balázs az alap szabályokon alapuló 2048 játékot írta meg.
+2014-ben jött ki [az eredeti játék](https://play2048.co/). Tóth Balázs az eredeti szabályokon alapuló 2048 játékot írta meg.
 ### Irányítás
 A ⬅⬆➡⬇ nyilak segítségével mozdíthatjuk el a csempéket, ilyenkor az összes csempe az adott irányba mozdul egészen amíg a pálya szélébe vagy egy másik csempébe nem ütközik.
 ### A játék célja
@@ -43,14 +43,14 @@ A játék akkor is véget ér, hogyha a pálya megtelik, és nincs két egyforma
 A játék legismertebb verziója először 1990-ben jelent meg, igazán akkor vált elterjedté, amikor 1992-ben bekerült a Windows 3.1-be és egészen Windows 7-ig elérhető volt az operációs rendszer programjai közt kisebb változtatásokkal. Tóth Bálint a [Google által készített változat](https://www.google.com/fbx?fbx=minesweeper) mintájára készítette el ezt a játékot.
 ### Irányítás
 A bal egérgomb segítségével fedhetünk fel mezőket.
-A jobb egérgomb segítségével helyezhetünk el illetve távolíthatunk el zászlókat. Zászlóval megjelölt mezőt nem tudunk felfedni, először el kell távolítanunk a zászlót.
+A jobb egérgomb segítségével helyezhetünk el, illetve távolíthatunk el zászlókat. Zászlóval megjelölt mezőt nem tudunk felfedni, először el kell távolítanunk a zászlót.
 ### A játék célja
 Fel kell fednünk az összes olyan mezőt, ahol nincs akna. A zászlóknak a játék eredménye szempontjából nincs jelentősége, csupán nekünk szolgálnak segítségül, így nem tudunk véletlenül felfedni olyan mezőt, amiről biztosan tudjuk, hogy akna, illetve segít átlátni a játékteret. 
 A felfedett mezőnek háromféle állapota lehet:
-- Üres: ez azt jelenti, hogy az adott mezőn illteve közvetlen szomszédjában nincs egy akna sem. Üres mező esetén az összes környező üres mező is felfedésre kerül egészen addig amíg szám mezőbe nem ütközünk.
-- Szám: a mezőn egy szám jelenik meg 1 és 8 között, ez azt jelenti, hogy az adott mező közvetlen szomszédai közül hány mező tartalmaz aknát. Szomszédnak számítanak az adott mező oldalait illetve sarkait érintő mezők.
+- Üres: ez azt jelenti, hogy az adott mezőn, illteve közvetlen szomszédjában nincs egy akna sem. Üres mező esetén az összes környező üres mező is felfedésre kerül egészen addig amíg szám mezőbe nem ütközünk.
+- Szám: a mezőn egy szám jelenik meg 1 és 8 között, ez azt jelenti, hogy az adott mező közvetlen szomszédai közül hány mező tartalmaz aknát. Szomszédnak számítanak az adott mező oldalait, illetve sarkait érintő mezők.
 ### Statisztika
-- Legjobb időt, ami alatt megnyerted a játékot
+- Lergrövidebb idő alatt megnyert játék
 - Megnyert játékok száma
 - Felfedezett mezők száma
 - Lerakott zászlók száma
